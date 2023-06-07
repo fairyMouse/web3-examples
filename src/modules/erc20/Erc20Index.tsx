@@ -2,7 +2,7 @@ import { Button, Container, Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
-// import MyTokenWalletTransfer from './components/MyTokenWalletTransfer';
+import MyTokenWalletTransfer from './components/MyTokenWalletTransfer';
 import MyTokenWalletDetails from './components/MyTokenWalletDetails';
 import { useErc20Context } from '@/pages/erc20';
 
@@ -37,7 +37,7 @@ const Erc20Index = () => {
   };
 
   return (
-    <Stack>
+    <Container>
       <Stack className="flex-row-cc">
         {account ? (
           <Button
@@ -65,8 +65,8 @@ const Erc20Index = () => {
         )}
       </Stack>
       {account && <MyTokenWalletDetails />}
-      {/* {account && <MyTokenWalletTransfer />} */}
-    </Stack>
+      {account && <MyTokenWalletTransfer />}
+    </Container>
   );
 };
 

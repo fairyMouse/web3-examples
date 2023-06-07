@@ -5,14 +5,14 @@ import { ethers } from 'ethers';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RHFTextField } from 'src/components/hook-form';
-import FormProvider from 'src/components/hook-form/FormProvider';
 import { toast } from 'react-toastify';
-import { useMyTokenWalletContext } from '../MyTokenWalletProvider';
+import { RHFTextField } from '@/src/components/hook-form';
+import { useErc20Context } from '@/pages/erc20';
+import FormProvider from '@/src/components/hook-form/FormProvider';
 
 const MyTokenWalletTransfer = () => {
   const { updateMyTokenBalance, signerContract, walletProvider } =
-    useMyTokenWalletContext();
+    useErc20Context();
 
   const [transferring, setTransferring] = useState<boolean>(false);
 

@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Link href={'/erc20'}>ERC 20</Link>
         </Stack>
 
-        <Stack sx={{ flex: 1, bgcolor: 'grey.100' }}>
+        <Stack sx={{ flex: 1, bgcolor: 'grey.50' }}>
           <Component {...pageProps} />
         </Stack>
       </Stack>

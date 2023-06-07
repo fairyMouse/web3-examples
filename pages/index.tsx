@@ -9,11 +9,7 @@ export default function Home() {
         height: '100vh',
       }}
     >
-      <Stack sx={{ width: 240 }}>
-        <Link href={'/erc20'}>ERC 20</Link>
-      </Stack>
-
-      <Stack sx={{ flex: 1, bgcolor: 'grey.100' }}>content</Stack>
+      首页
     </Stack>
   );
 }
