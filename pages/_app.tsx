@@ -1,4 +1,4 @@
-// import '@/styles/globals.css'
+import 'windi.css';
 import ThemeProvider from '@/src/theme';
 import type { AppProps } from 'next/app';
 
