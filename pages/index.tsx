@@ -1,22 +1,19 @@
-import { Inter } from 'next/font/google'
-import Link from 'next/link'
-
-const inter = Inter({ subsets: ['latin'] })
+import { Stack } from '@mui/material';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main
-      className={`p-4 flex min-h-screen flex-col items-center ${inter.className}`}
+    <Stack
+      flexDirection={'row'}
+      sx={{
+        height: '100vh',
+      }}
     >
-      <h4>首页</h4>
-      <ul className="mt-8">
-        <li>
-          <Link href={'/posts'}>post列表页</Link>
-        </li>
-        <li className="mt-2">
-          <Link href={'/about'}>about</Link>
-        </li>
-      </ul>
-    </main>
-  )
+      <Stack sx={{ width: 240 }}>
+        <Link href={'/erc20'}>ERC 20</Link>
+      </Stack>
+
+      <Stack sx={{ flex: 1, bgcolor: 'grey.100' }}>content</Stack>
+    </Stack>
+  );
 }
