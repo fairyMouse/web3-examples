@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { toast } from 'react-toastify';
 import { ethers } from 'ethers';
-import HF_ERC20Abi from 'src/constants/abi/HF_ERC20.abi.json';
+import HFT_ERC20_ABI from 'src/constants/abi/HFT_ERC20.abi.json';
 import { myContractAddr } from 'src/constants/wallet';
 import { IErc20Context } from '@/src/modules/erc20/types';
 import Erc20Index from '@/src/modules/erc20/Erc20Index';
@@ -45,11 +45,19 @@ const Erc20Provider = () => {
 
     setWalletProvider(provider);
 
-    const contract = new ethers.Contract(myContractAddr, HF_ERC20Abi, provider);
-    const contract2 = new ethers.Contract(myContractAddr, HF_ERC20Abi, signer);
+    const contract = new ethers.Contract(
+      myContractAddr,
+      HFT_ERC20_ABI,
+      provider
+    );
+    const signerContract = new ethers.Contract(
+      myContractAddr,
+      HFT_ERC20_ABI,
+      signer
+    );
 
     setProviderContract(contract);
-    setSignerContract(contract2);
+    setSignerContract(signerContract);
   }, []);
 
   const updateMyTokenBalance = useCallback(() => {
