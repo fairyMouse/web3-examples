@@ -1,4 +1,4 @@
-import { Button, Container, Stack } from '@mui/material';
+import { Box, Button, Container, Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
@@ -39,33 +39,39 @@ const Erc20Index = () => {
   return (
     <Container>
       <Stack className="flex-row-cc">
-        {account ? (
-          <Button
-            variant="outlined"
-            size="large"
-            sx={{
-              width: '50%',
-              ml: 2,
-            }}
-            onClick={walletDisconnect}
-            onMouseEnter={() => setButtonText('disconnect')}
-            onMouseLeave={() => setButtonText(account)}
-          >
-            {buttonText}
-          </Button>
-        ) : (
-          <LoadingButton
-            size="large"
-            variant="contained"
-            loading={connecting}
-            onClick={connectToMetamask}
-          >
-            connect metamask
-          </LoadingButton>
-        )}
+        <Stack sx={{ width: 500, mt: 5 }}>
+          {account ? (
+            <Button
+              variant="outlined"
+              onClick={walletDisconnect}
+              onMouseEnter={() => setButtonText('disconnect')}
+              onMouseLeave={() => setButtonText(account)}
+            >
+              {buttonText}
+            </Button>
+          ) : (
+            <LoadingButton
+              variant="contained"
+              loading={connecting}
+              onClick={connectToMetamask}
+            >
+              connect metamask to see more
+            </LoadingButton>
+          )}
+        </Stack>
       </Stack>
-      {account && <MyTokenWalletDetails />}
-      {account && <MyTokenWalletTransfer />}
+
+      <Box
+        gap={3}
+        display="grid"
+        gridTemplateColumns={{
+          sm: 'repeat(1, 1fr)',
+          lg: 'repeat(2, 1fr)',
+        }}
+      >
+        <MyTokenWalletDetails />
+        {account && <MyTokenWalletTransfer />}
+      </Box>
     </Container>
   );
 };

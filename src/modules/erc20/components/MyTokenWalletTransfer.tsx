@@ -11,8 +11,18 @@ import { useErc20Context } from '@/pages/erc20';
 import FormProvider from '@/src/components/hook-form/FormProvider';
 
 const MyTokenWalletTransfer = () => {
-  const { updateMyTokenBalance, signerContract, walletProvider } =
-    useErc20Context();
+  const {
+    account,
+    providerContract,
+    balance,
+    updateMyTokenBalance,
+    signerContract,
+    walletProvider,
+  } = useErc20Context();
+
+  useEffect(() => {
+    updateMyTokenBalance();
+  }, [account, providerContract]);
 
   const [transferring, setTransferring] = useState<boolean>(false);
 
@@ -61,6 +71,10 @@ const MyTokenWalletTransfer = () => {
   return (
     <Card sx={{ p: 3, mt: 5 }}>
       <Typography variant="h4"> Transfer </Typography>
+
+      <Typography variant="body1">
+        Current Balance: {`${balance || 0} HF`}
+      </Typography>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} sx={{ mt: 2 }}>

@@ -6,14 +6,13 @@ import { ethers } from 'ethers';
 import { useErc20Context } from '@/pages/erc20';
 
 const MyTokenWalletDetails = () => {
-  const { account, balance, updateMyTokenBalance, providerContract } =
-    useErc20Context();
+  const { providerContract } = useErc20Context();
 
   const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
 
   useEffect(() => {
     initToken();
-  }, []);
+  }, [providerContract]);
 
   async function initToken() {
     if (providerContract) {
@@ -27,10 +26,6 @@ const MyTokenWalletDetails = () => {
       });
     }
   }
-
-  useEffect(() => {
-    updateMyTokenBalance();
-  }, [account, providerContract]);
 
   return (
     <Card sx={{ p: 3, mt: 5 }}>
@@ -47,9 +42,6 @@ const MyTokenWalletDetails = () => {
         </Typography>
         <Typography variant="body1">
           Token Decimals: {tokenInfo?.decimals || ''}
-        </Typography>
-        <Typography variant="body1">
-          Current Balance: {`${balance || 0} HF`}
         </Typography>
       </Stack>
     </Card>
