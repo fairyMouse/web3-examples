@@ -9,7 +9,8 @@ export interface IErc20Context {
   account: string;
   setAccount: (account: string) => void;
   balance: string;
-  updateMyTokenBalance: () => void;
+  myBalanceLoading: boolean;
+  updateMyBalance: () => void;
   walletProvider: ethers.providers.Web3Provider | null;
   providerContract: ethers.Contract | null;
   signerContract: ethers.Contract | null;

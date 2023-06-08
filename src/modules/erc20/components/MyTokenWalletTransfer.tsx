@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { Card, Stack, TextField, Typography } from '@mui/material';
+import { Card, IconButton, Stack, TextField, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { LoadingButton } from '@mui/lab';
@@ -15,13 +15,14 @@ const MyTokenWalletTransfer = () => {
     account,
     providerContract,
     balance,
-    updateMyTokenBalance,
+    myBalanceLoading,
+    updateMyBalance,
     signerContract,
     walletProvider,
   } = useErc20Context();
 
   useEffect(() => {
-    updateMyTokenBalance();
+    updateMyBalance();
   }, [account, providerContract]);
 
   const [transferring, setTransferring] = useState<boolean>(false);
@@ -56,7 +57,7 @@ const MyTokenWalletTransfer = () => {
         const receipt = await res.wait();
         console.log('交易收据信息:', receipt);
 
-        updateMyTokenBalance();
+        updateMyBalance();
         setValue('amount', '');
         toast.success('successfully transferred');
       } catch (error: any) {
@@ -72,9 +73,21 @@ const MyTokenWalletTransfer = () => {
     <Card sx={{ p: 3, mt: 5 }}>
       <Typography variant="h4"> Transfer </Typography>
 
-      <Typography variant="body1">
-        Current Balance: {`${balance || 0} HF`}
-      </Typography>
+      <Stack flexDirection={'row'} alignItems={'center'} sx={{ mt: 2 }}>
+        <Typography variant="body1">
+          Current Balance: {`${balance || 0} MTT`}
+        </Typography>
+
+        <LoadingButton
+          size="small"
+          variant="outlined"
+          sx={{ ml: 'auto' }}
+          onClick={updateMyBalance}
+          loading={myBalanceLoading}
+        >
+          refresh
+        </LoadingButton>
+      </Stack>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} sx={{ mt: 2 }}>

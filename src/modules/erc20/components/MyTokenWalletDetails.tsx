@@ -19,6 +19,7 @@ const MyTokenWalletDetails = () => {
       const symbol = await providerContract.symbol();
       const name = await providerContract.name();
       const decimals = await providerContract.decimals();
+
       setTokenInfo({
         name,
         symbol,
@@ -34,6 +35,7 @@ const MyTokenWalletDetails = () => {
         <Typography variant="body1">
           Contract Address: {myContractAddr}
         </Typography>
+
         <Typography variant="body1">
           Token Name: {tokenInfo?.name || ''}
         </Typography>

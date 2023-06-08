@@ -33,6 +33,7 @@ const Erc20Provider = () => {
 
   const [account, setAccount] = useState('');
   const [balance, setBalance] = useState('');
+  const [myBalanceLoading, setMyBalanceLoading] = useState(false);
 
   useEffect(() => {
     if (!window.ethereum) {
@@ -40,7 +41,7 @@ const Erc20Provider = () => {
       return;
     }
     // ethers 6.0版本后似乎就不能这么用了
-    const provider = new ethers.providers.Web3Provider(window.ethereum as any); // provider为了读
+    const provider = new ethers.providers.Web3Provider(window.ethereum); // provider为了读
     const signer = provider.getSigner(); // signer为了写
 
     setWalletProvider(provider);
@@ -60,13 +61,15 @@ const Erc20Provider = () => {
     setSignerContract(signerContract);
   }, []);
 
-  const updateMyTokenBalance = useCallback(() => {
+  const updateMyBalance = useCallback(async () => {
+    setMyBalanceLoading(true);
     if (providerContract) {
-      providerContract.balanceOf(account).then((res: any) => {
-        const tokenBalance = ethers.utils.formatUnits(res, 4);
-        setBalance(tokenBalance);
-      });
+      const res = await providerContract.balanceOf(account);
+
+      const tokenBalance = ethers.utils.formatUnits(res, 4);
+      setBalance(tokenBalance);
     }
+    setMyBalanceLoading(false);
   }, [account, providerContract]);
 
   return (
@@ -75,7 +78,8 @@ const Erc20Provider = () => {
         account,
         setAccount,
         balance,
-        updateMyTokenBalance,
+        myBalanceLoading,
+        updateMyBalance,
         walletProvider,
         providerContract,
         signerContract,
