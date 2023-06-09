@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { ethers } from 'ethers';
 import HFT_ERC20_ABI from 'src/constants/abi/HFT_ERC20.abi.json';
 import { myContractAddr } from 'src/constants/wallet';
-import { IErc20Context } from '@/src/modules/erc20/types';
+import { IErc20Context, IMyTokenInfo } from '@/src/modules/erc20/types';
 import Erc20Index from '@/src/modules/erc20/Erc20Index';
 
 export const Erc20Context = createContext<IErc20Context | null>(null);
@@ -61,22 +61,44 @@ const Erc20Provider = () => {
     setSignerContract(signerContract);
   }, []);
 
+  const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
+
+  useEffect(() => {
+    initToken();
+  }, [providerContract]);
+
+  async function initToken() {
+    if (providerContract) {
+      const symbol = await providerContract.symbol();
+      const name = await providerContract.name();
+      const decimals = await providerContract.decimals();
+
+      setTokenInfo({
+        name,
+        symbol,
+        decimals,
+      });
+    }
+  }
+
+  // ethers.utils.formatEther
   const updateMyBalance = useCallback(async () => {
     setMyBalanceLoading(true);
-    if (providerContract) {
+    if (providerContract && tokenInfo) {
       const res = await providerContract.balanceOf(account);
 
-      const tokenBalance = ethers.utils.formatUnits(res, 4);
+      const tokenBalance = ethers.utils.formatUnits(res, tokenInfo.decimals);
       setBalance(tokenBalance);
     }
     setMyBalanceLoading(false);
-  }, [account, providerContract]);
+  }, [account, tokenInfo, providerContract]);
 
   return (
     <Erc20Context.Provider
       value={{
         account,
         setAccount,
+        tokenInfo,
         balance,
         myBalanceLoading,
         updateMyBalance,

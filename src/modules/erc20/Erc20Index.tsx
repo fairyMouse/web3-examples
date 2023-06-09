@@ -2,8 +2,8 @@ import { Box, Button, Container, Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
-import MyTokenWalletTransfer from './components/MyTokenWalletTransfer';
-import MyTokenWalletDetails from './components/MyTokenWalletDetails';
+import TokenTransfer from './components/TokenTransfer';
+import TokenBasicInfo from './components/TokenBasicInfo';
 import { useErc20Context } from '@/pages/erc20';
 
 const Erc20Index = () => {
@@ -69,8 +69,8 @@ const Erc20Index = () => {
           lg: 'repeat(2, 1fr)',
         }}
       >
-        <MyTokenWalletDetails />
-        {account && <MyTokenWalletTransfer />}
+        <TokenBasicInfo />
+        {account && <TokenTransfer />}
       </Box>
     </Container>
   );

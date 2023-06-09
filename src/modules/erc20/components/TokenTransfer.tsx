@@ -10,9 +10,10 @@ import { RHFTextField } from '@/src/components/hook-form';
 import { useErc20Context } from '@/pages/erc20';
 import FormProvider from '@/src/components/hook-form/FormProvider';
 
-const MyTokenWalletTransfer = () => {
+const TokenTransfer = () => {
   const {
     account,
+    tokenInfo,
     providerContract,
     balance,
     myBalanceLoading,
@@ -47,10 +48,10 @@ const MyTokenWalletTransfer = () => {
   async function onSubmit() {
     console.log('values:', values);
     const { targetAddress, amount } = values;
-    if (walletProvider && signerContract) {
+    if (walletProvider && signerContract && tokenInfo) {
       try {
         setTransferring(true);
-        const value = ethers.utils.parseUnits(amount, 4); // 精度需要自己指定的
+        const value = ethers.utils.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
 
         const res = await signerContract.transfer(targetAddress, value);
         console.log('交易结果信息:', res);
@@ -97,7 +98,7 @@ const MyTokenWalletTransfer = () => {
             name="targetAddress"
           ></RHFTextField>
           <RHFTextField
-            placeholder="amount"
+            placeholder="amount (MTT unit)"
             size="small"
             name="amount"
           ></RHFTextField>
@@ -114,4 +115,4 @@ const MyTokenWalletTransfer = () => {
   );
 };
 
-export default MyTokenWalletTransfer;
+export default TokenTransfer;

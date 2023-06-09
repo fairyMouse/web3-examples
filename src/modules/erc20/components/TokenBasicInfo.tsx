@@ -5,28 +5,8 @@ import { myContractAddr } from 'src/constants/wallet';
 import { ethers } from 'ethers';
 import { useErc20Context } from '@/pages/erc20';
 
-const MyTokenWalletDetails = () => {
-  const { providerContract } = useErc20Context();
-
-  const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
-
-  useEffect(() => {
-    initToken();
-  }, [providerContract]);
-
-  async function initToken() {
-    if (providerContract) {
-      const symbol = await providerContract.symbol();
-      const name = await providerContract.name();
-      const decimals = await providerContract.decimals();
-
-      setTokenInfo({
-        name,
-        symbol,
-        decimals,
-      });
-    }
-  }
+const TokenBasicInfo = () => {
+  const { tokenInfo } = useErc20Context();
 
   return (
     <Card sx={{ p: 3, mt: 5 }}>
@@ -50,4 +30,4 @@ const MyTokenWalletDetails = () => {
   );
 };
 
-export default MyTokenWalletDetails;
+export default TokenBasicInfo;
