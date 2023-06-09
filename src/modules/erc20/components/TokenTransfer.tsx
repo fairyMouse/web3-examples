@@ -14,17 +14,17 @@ const TokenTransfer = () => {
   const {
     account,
     tokenInfo,
-    providerContract,
+    erc20ProviderContract,
     balance,
     myBalanceLoading,
     updateMyBalance,
-    signerContract,
+    erc20SignerContract,
     walletProvider,
   } = useErc20Context();
 
   useEffect(() => {
     updateMyBalance();
-  }, [account, providerContract]);
+  }, [account, erc20ProviderContract]);
 
   const [transferring, setTransferring] = useState<boolean>(false);
 
@@ -48,12 +48,12 @@ const TokenTransfer = () => {
   async function onSubmit() {
     console.log('values:', values);
     const { targetAddress, amount } = values;
-    if (walletProvider && signerContract && tokenInfo) {
+    if (walletProvider && erc20SignerContract && tokenInfo) {
       try {
         setTransferring(true);
         const value = ethers.utils.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
 
-        const res = await signerContract.transfer(targetAddress, value);
+        const res = await erc20SignerContract.transfer(targetAddress, value);
         console.log('交易结果信息:', res);
         const receipt = await res.wait();
         console.log('交易收据信息:', receipt);

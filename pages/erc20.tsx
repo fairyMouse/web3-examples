@@ -7,8 +7,12 @@ import {
 } from 'react';
 import { toast } from 'react-toastify';
 import { ethers } from 'ethers';
-import HFT_ERC20_ABI from 'src/constants/abi/HFT_ERC20.abi.json';
-import { myContractAddr } from 'src/constants/wallet';
+import MTT_ERC20_ABI from 'src/constants/abi/MTT_ERC20.abi.json';
+import MTT_FAUCET_ABI from 'src/constants/abi/MTT_FAUCET.abi.json';
+import {
+  ERC20_CONTRACT_ADDR,
+  FAUCET_CONTRACT_ADDR,
+} from 'src/constants/wallet';
 import { IErc20Context, IMyTokenInfo } from '@/src/modules/erc20/types';
 import Erc20Index from '@/src/modules/erc20/Erc20Index';
 
@@ -25,11 +29,18 @@ export const useErc20Context = () => {
 const Erc20Provider = () => {
   const [walletProvider, setWalletProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
-  const [providerContract, setProviderContract] =
+
+  // 为了ERC20合约的读写
+  const [erc20ProviderContract, setErc20ProviderContract] =
     useState<ethers.Contract | null>(null);
-  const [signerContract, setSignerContract] = useState<ethers.Contract | null>(
-    null
-  );
+  const [erc20SignerContract, setErc20SignerContract] =
+    useState<ethers.Contract | null>(null);
+
+  // 为了Faucet合约的读写
+  const [faucetProviderContract, setFaucetProviderContract] =
+    useState<ethers.Contract | null>(null);
+  const [faucetSignerContract, setFaucetSignerContract] =
+    useState<ethers.Contract | null>(null);
 
   const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
   const [account, setAccount] = useState('');
@@ -47,30 +58,43 @@ const Erc20Provider = () => {
 
     setWalletProvider(provider);
 
-    const contract = new ethers.Contract(
-      myContractAddr,
-      HFT_ERC20_ABI,
+    const erc20Contract = new ethers.Contract(
+      ERC20_CONTRACT_ADDR,
+      MTT_ERC20_ABI,
       provider
     );
-    const signerContract = new ethers.Contract(
-      myContractAddr,
-      HFT_ERC20_ABI,
+    const erc20SignerContract = new ethers.Contract(
+      ERC20_CONTRACT_ADDR,
+      MTT_ERC20_ABI,
       signer
     );
 
-    setProviderContract(contract);
-    setSignerContract(signerContract);
+    setErc20ProviderContract(erc20Contract);
+    setErc20SignerContract(erc20SignerContract);
+
+    const faucetContract = new ethers.Contract(
+      FAUCET_CONTRACT_ADDR,
+      MTT_FAUCET_ABI,
+      provider
+    );
+    const faucetSignerContract = new ethers.Contract(
+      FAUCET_CONTRACT_ADDR,
+      MTT_FAUCET_ABI,
+      signer
+    );
+    setFaucetProviderContract(faucetContract);
+    setFaucetSignerContract(faucetSignerContract);
   }, []);
 
   useEffect(() => {
     initToken();
-  }, [providerContract]);
+  }, [erc20ProviderContract]);
 
   async function initToken() {
-    if (providerContract) {
-      const symbol = await providerContract.symbol();
-      const name = await providerContract.name();
-      const decimals = await providerContract.decimals();
+    if (erc20ProviderContract) {
+      const symbol = await erc20ProviderContract.symbol();
+      const name = await erc20ProviderContract.name();
+      const decimals = await erc20ProviderContract.decimals();
 
       setTokenInfo({
         name,
@@ -83,14 +107,14 @@ const Erc20Provider = () => {
   // ethers.utils.formatEther
   const updateMyBalance = useCallback(async () => {
     setMyBalanceLoading(true);
-    if (providerContract && tokenInfo) {
-      const res = await providerContract.balanceOf(account);
+    if (erc20ProviderContract && tokenInfo) {
+      const res = await erc20ProviderContract.balanceOf(account);
 
       const tokenBalance = ethers.utils.formatUnits(res, tokenInfo.decimals);
       setBalance(tokenBalance);
     }
     setMyBalanceLoading(false);
-  }, [account, tokenInfo, providerContract]);
+  }, [account, tokenInfo, erc20ProviderContract]);
 
   return (
     <Erc20Context.Provider
@@ -102,8 +126,10 @@ const Erc20Provider = () => {
         myBalanceLoading,
         updateMyBalance,
         walletProvider,
-        providerContract,
-        signerContract,
+        erc20ProviderContract,
+        erc20SignerContract,
+        faucetProviderContract,
+        faucetSignerContract,
       }}
     >
       <Erc20Index />

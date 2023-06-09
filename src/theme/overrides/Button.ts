@@ -122,6 +122,7 @@ export default function Button(theme: Theme) {
     MuiButton: {
       defaultProps: {
         disableElevation: true,
+        variant: 'contained',
       },
 
       styleOverrides: {

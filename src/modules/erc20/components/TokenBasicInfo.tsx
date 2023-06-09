@@ -1,7 +1,7 @@
 import { Card, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { IMyTokenInfo } from '../types';
-import { myContractAddr } from 'src/constants/wallet';
+import { ERC20_CONTRACT_ADDR } from 'src/constants/wallet';
 import { ethers } from 'ethers';
 import { useErc20Context } from '@/pages/erc20';
 
@@ -13,7 +13,7 @@ const TokenBasicInfo = () => {
       <Typography variant="h4">Basic Info</Typography>
       <Stack spacing={2} sx={{ mt: 2 }}>
         <Typography variant="body1">
-          Contract Address: {myContractAddr}
+          Contract Address: {ERC20_CONTRACT_ADDR}
         </Typography>
 
         <Typography variant="body1">

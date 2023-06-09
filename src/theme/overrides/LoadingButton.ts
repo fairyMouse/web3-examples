@@ -3,6 +3,9 @@ import { Theme } from '@mui/material/styles';
 export default function LoadingButton(theme: Theme) {
   return {
     MuiLoadingButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
       variants: [
         {
           props: { loading: true, loadingPosition: 'start', size: 'small' },

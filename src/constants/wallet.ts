@@ -5,4 +5,6 @@ export const WELCOME_TEXT =
 
 export const originText = WELCOME_TEXT + dayjs().unix() * 1000;
 
-export const myContractAddr = '0xe96a4D42072024e6b4b3ee615eB4dFd3F6fAd322';
+export const ERC20_CONTRACT_ADDR = '0x50cd9608B2681F450deaC9AC6BcFea5Aa55BC858';
+export const FAUCET_CONTRACT_ADDR =
+  '0xd986437F12D06a753f24eA56b334044E4531f7c9';

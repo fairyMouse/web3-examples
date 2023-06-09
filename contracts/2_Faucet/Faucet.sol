@@ -15,7 +15,8 @@ contract ERC20 is IERC20 {
     string public name;   // 名称
     string public symbol;  // 符号
     
-    uint8 public decimals = 18; // 小数位数
+    // uint8 public decimals = 18; // 小数位数
+    uint8 public decimals = 2; // 小数位数
 
     constructor(string memory name_, string memory symbol_){
         name = name_;
@@ -69,7 +70,7 @@ contract ERC20 is IERC20 {
 // ERC20代币的水龙头合约
 contract Faucet {
 
-    uint256 public amountAllowed = 100; // 每次领 100单位代币
+    uint256 public amountAllowed = 1000; // 每次领 1000单位代币
     address public tokenContract;   // token合约地址
     mapping(address => bool) public requestedAddress;   // 记录领取过代币的地址
 

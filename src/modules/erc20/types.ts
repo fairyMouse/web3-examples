@@ -13,6 +13,8 @@ export interface IErc20Context {
   myBalanceLoading: boolean;
   updateMyBalance: () => void;
   walletProvider: ethers.providers.Web3Provider | null;
-  providerContract: ethers.Contract | null;
-  signerContract: ethers.Contract | null;
+  erc20ProviderContract: ethers.Contract | null;
+  erc20SignerContract: ethers.Contract | null;
+  faucetProviderContract: ethers.Contract | null;
+  faucetSignerContract: ethers.Contract | null;
 }
