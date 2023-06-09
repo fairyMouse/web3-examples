@@ -9,7 +9,7 @@ const TokenBasicInfo = () => {
   const { tokenInfo } = useErc20Context();
 
   return (
-    <Card sx={{ p: 3, mt: 5 }}>
+    <Card sx={{ p: 3 }}>
       <Typography variant="h4">Basic Info</Typography>
       <Stack spacing={2} sx={{ mt: 2 }}>
         <Typography variant="body1">

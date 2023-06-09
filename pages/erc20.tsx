@@ -31,6 +31,7 @@ const Erc20Provider = () => {
     null
   );
 
+  const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
   const [account, setAccount] = useState('');
   const [balance, setBalance] = useState('');
   const [myBalanceLoading, setMyBalanceLoading] = useState(false);
@@ -60,8 +61,6 @@ const Erc20Provider = () => {
     setProviderContract(contract);
     setSignerContract(signerContract);
   }, []);
-
-  const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
 
   useEffect(() => {
     initToken();

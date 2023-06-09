@@ -38,7 +38,7 @@ const TokenTransfer = () => {
     amount: string;
   }>({
     resolver: yupResolver(schema),
-    defaultValues: { targetAddress: '' },
+    defaultValues: { targetAddress: '', amount: '0' },
   });
 
   const { watch, setValue, handleSubmit } = methods;
@@ -71,7 +71,7 @@ const TokenTransfer = () => {
   }
 
   return (
-    <Card sx={{ p: 3, mt: 5 }}>
+    <Card sx={{ p: 3 }}>
       <Typography variant="h4"> Transfer </Typography>
 
       <Stack flexDirection={'row'} alignItems={'center'} sx={{ mt: 2 }}>

@@ -1,19 +1,29 @@
-import { Box, Button, Container, Stack } from '@mui/material';
+import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import TokenTransfer from './components/TokenTransfer';
 import TokenBasicInfo from './components/TokenBasicInfo';
 import { useErc20Context } from '@/pages/erc20';
+import TokenFaucet from './components/TokenFaucet';
 
 const Erc20Index = () => {
   const { account, setAccount, walletProvider } = useErc20Context();
   const [buttonText, setButtonText] = useState('');
   const [connecting, setConnecting] = useState(false);
 
+  const network = useMemo(
+    () => (walletProvider ? walletProvider.network : null),
+    [walletProvider]
+  );
+
   useEffect(() => {
     setButtonText(account);
   }, [account]);
+
+  useEffect(() => {
+    connectToMetamask();
+  }, [walletProvider]);
 
   const connectToMetamask = async () => {
     setConnecting(true);
@@ -38,7 +48,7 @@ const Erc20Index = () => {
 
   return (
     <Container>
-      <Stack className="flex-row-cc">
+      <Stack alignItems={'center'} spacing={2}>
         <Stack sx={{ width: 500, mt: 5 }}>
           {account ? (
             <Button
@@ -59,10 +69,16 @@ const Erc20Index = () => {
             </LoadingButton>
           )}
         </Stack>
+        {network && (
+          <Stack flexDirection={'row'} gap={1}>
+            <Typography variant="subtitle1">network: </Typography>
+            <Typography variant="body2">{network.name}</Typography>
+          </Stack>
+        )}
       </Stack>
-
       <Box
         gap={3}
+        sx={{ mt: 5 }}
         display="grid"
         gridTemplateColumns={{
           sm: 'repeat(1, 1fr)',
@@ -71,6 +87,7 @@ const Erc20Index = () => {
       >
         <TokenBasicInfo />
         {account && <TokenTransfer />}
+        {account && <TokenFaucet />}
       </Box>
     </Container>
   );
