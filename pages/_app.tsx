@@ -3,6 +3,8 @@ import ThemeProvider from '@/src/theme';
 import type { AppProps } from 'next/app';
 import { Stack } from '@mui/material';
 import Link from 'next/link';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -21,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Stack>
       </Stack>
+      <ToastContainer theme="light" limit={2} pauseOnFocusLoss={false} />
     </ThemeProvider>
   );
 }

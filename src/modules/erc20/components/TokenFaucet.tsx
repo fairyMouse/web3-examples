@@ -1,9 +1,52 @@
 import { useErc20Context } from '@/pages/erc20';
 import { LoadingButton } from '@mui/lab';
 import { Alert, Card, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const TokenFaucet = () => {
-  const { tokenInfo } = useErc20Context();
+  const {
+    account,
+    tokenInfo,
+    faucetProviderContract,
+    faucetSignerContract,
+    updateMyBalance,
+  } = useErc20Context();
+
+  const [faucetReceived, setFaucetReceived] = useState(false);
+  const [receiving, setReceiving] = useState(false);
+
+  useEffect(() => {
+    updateFaucetReceiveState();
+  }, [faucetProviderContract]);
+
+  async function updateFaucetReceiveState() {
+    if (faucetProviderContract) {
+      const res = await faucetProviderContract.requestedAddress(account);
+
+      setFaucetReceived(res);
+    }
+  }
+
+  async function receiveCoins() {
+    setReceiving(true);
+    if (faucetSignerContract) {
+      try {
+        const res = await faucetSignerContract.requestTokens();
+        console.log('请求水龙头结果:', res);
+        const receipt = await res.wait();
+        console.log('请求水龙头收据信息:', receipt);
+
+        updateFaucetReceiveState();
+        updateMyBalance();
+      } catch (error: any) {
+        console.log(error.toString());
+        toast.error(123);
+      }
+    }
+    setReceiving(false);
+  }
+
   return (
     <Card sx={{ p: 3 }}>
       <Typography variant="h4"> Faucet </Typography>
@@ -14,7 +57,13 @@ const TokenFaucet = () => {
             The same wallet address can only receive 10{tokenInfo.symbol} test
             coins.
           </Alert>
-          <LoadingButton>Receive</LoadingButton>
+          <LoadingButton
+            loading={receiving}
+            onClick={receiveCoins}
+            disabled={faucetReceived}
+          >
+            {faucetReceived ? 'Already Received' : 'Receive'}
+          </LoadingButton>
         </Stack>
       )}
     </Card>

@@ -2,7 +2,6 @@ import { Card, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { IMyTokenInfo } from '../types';
 import { ERC20_CONTRACT_ADDR } from 'src/constants/wallet';
-import { ethers } from 'ethers';
 import { useErc20Context } from '@/pages/erc20';
 
 const TokenBasicInfo = () => {
@@ -23,7 +22,7 @@ const TokenBasicInfo = () => {
           Token Symbol: {tokenInfo?.symbol || ''}
         </Typography>
         <Typography variant="body1">
-          Token Decimals: {tokenInfo?.decimals || ''}
+          Token Decimals: {tokenInfo?.decimals.toString() || ''}
         </Typography>
       </Stack>
     </Card>

@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { toast } from 'react-toastify';
@@ -27,9 +28,6 @@ export const useErc20Context = () => {
 };
 
 const Erc20Provider = () => {
-  const [walletProvider, setWalletProvider] =
-    useState<ethers.providers.Web3Provider | null>(null);
-
   // 为了ERC20合约的读写
   const [erc20ProviderContract, setErc20ProviderContract] =
     useState<ethers.Contract | null>(null);
@@ -47,44 +45,54 @@ const Erc20Provider = () => {
   const [balance, setBalance] = useState('');
   const [myBalanceLoading, setMyBalanceLoading] = useState(false);
 
+  const [ethersProvider, setEthersProvider] =
+    useState<ethers.BrowserProvider | null>(null);
+
   useEffect(() => {
     if (!window.ethereum) {
       toast.error('please install Metamask');
       return;
     }
-    // ethers 6.0版本后似乎就不能这么用了
-    const provider = new ethers.providers.Web3Provider(window.ethereum); // provider为了读
-    const signer = provider.getSigner(); // signer为了写
-
-    setWalletProvider(provider);
-
-    const erc20Contract = new ethers.Contract(
-      ERC20_CONTRACT_ADDR,
-      MTT_ERC20_ABI,
-      provider
-    );
-    const erc20SignerContract = new ethers.Contract(
-      ERC20_CONTRACT_ADDR,
-      MTT_ERC20_ABI,
-      signer
-    );
-
-    setErc20ProviderContract(erc20Contract);
-    setErc20SignerContract(erc20SignerContract);
-
-    const faucetContract = new ethers.Contract(
-      FAUCET_CONTRACT_ADDR,
-      MTT_FAUCET_ABI,
-      provider
-    );
-    const faucetSignerContract = new ethers.Contract(
-      FAUCET_CONTRACT_ADDR,
-      MTT_FAUCET_ABI,
-      signer
-    );
-    setFaucetProviderContract(faucetContract);
-    setFaucetSignerContract(faucetSignerContract);
+    const provider = new ethers.BrowserProvider(window.ethereum); // provider为了读
+    setEthersProvider(provider);
   }, []);
+
+  useEffect(() => {
+    setContract();
+  }, [account, ethersProvider]);
+
+  async function setContract() {
+    if (ethersProvider) {
+      const signer = await ethersProvider.getSigner(); // signer为了写
+
+      const erc20Contract = new ethers.Contract(
+        ERC20_CONTRACT_ADDR,
+        MTT_ERC20_ABI,
+        ethersProvider
+      );
+      const erc20SignerContract = new ethers.Contract(
+        ERC20_CONTRACT_ADDR,
+        MTT_ERC20_ABI,
+        signer
+      );
+
+      setErc20ProviderContract(erc20Contract);
+      setErc20SignerContract(erc20SignerContract);
+
+      const faucetContract = new ethers.Contract(
+        FAUCET_CONTRACT_ADDR,
+        MTT_FAUCET_ABI,
+        ethersProvider
+      );
+      const faucetSignerContract = new ethers.Contract(
+        FAUCET_CONTRACT_ADDR,
+        MTT_FAUCET_ABI,
+        signer
+      );
+      setFaucetProviderContract(faucetContract);
+      setFaucetSignerContract(faucetSignerContract);
+    }
+  }
 
   useEffect(() => {
     initToken();
@@ -94,27 +102,26 @@ const Erc20Provider = () => {
     if (erc20ProviderContract) {
       const symbol = await erc20ProviderContract.symbol();
       const name = await erc20ProviderContract.name();
-      const decimals = await erc20ProviderContract.decimals();
+      const decimalsBigInt = await erc20ProviderContract.decimals();
 
       setTokenInfo({
         name,
         symbol,
-        decimals,
+        decimals: decimalsBigInt,
       });
     }
   }
 
-  // ethers.utils.formatEther
-  const updateMyBalance = useCallback(async () => {
+  const updateMyBalance = async () => {
     setMyBalanceLoading(true);
     if (erc20ProviderContract && tokenInfo) {
       const res = await erc20ProviderContract.balanceOf(account);
 
-      const tokenBalance = ethers.utils.formatUnits(res, tokenInfo.decimals);
+      const tokenBalance = ethers.formatUnits(res, tokenInfo.decimals);
       setBalance(tokenBalance);
     }
     setMyBalanceLoading(false);
-  }, [account, tokenInfo, erc20ProviderContract]);
+  };
 
   return (
     <Erc20Context.Provider
@@ -125,7 +132,7 @@ const Erc20Provider = () => {
         balance,
         myBalanceLoading,
         updateMyBalance,
-        walletProvider,
+        ethersProvider,
         erc20ProviderContract,
         erc20SignerContract,
         faucetProviderContract,

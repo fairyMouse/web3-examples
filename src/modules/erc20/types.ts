@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 export interface IMyTokenInfo {
   name: string;
   symbol: string;
-  decimals: number;
+  decimals: ethers.BigNumberish;
 }
 export interface IErc20Context {
   account: string;
@@ -12,7 +12,7 @@ export interface IErc20Context {
   balance: string;
   myBalanceLoading: boolean;
   updateMyBalance: () => void;
-  walletProvider: ethers.providers.Web3Provider | null;
+  ethersProvider: ethers.BrowserProvider | null;
   erc20ProviderContract: ethers.Contract | null;
   erc20SignerContract: ethers.Contract | null;
   faucetProviderContract: ethers.Contract | null;
