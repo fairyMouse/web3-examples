@@ -53,8 +53,23 @@ const Erc20Provider = () => {
       toast.error('please install Metamask');
       return;
     }
-    const provider = new ethers.BrowserProvider(window.ethereum); // provider为了读
-    setEthersProvider(provider);
+    if (window.ethereum.selectedAddress === null) {
+      toast.warn('MetaMask is not logged in');
+      return;
+    }
+
+    const handleAccountsChanged = () => {
+      const provider = new ethers.BrowserProvider(window.ethereum); // provider为了读
+      setEthersProvider(provider);
+    };
+    handleAccountsChanged();
+
+    // 监听账户切换
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+    return () => {
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
   }, []);
 
   useEffect(() => {
@@ -65,7 +80,7 @@ const Erc20Provider = () => {
     if (ethersProvider) {
       const signer = await ethersProvider.getSigner(); // signer为了写
 
-      const erc20Contract = new ethers.Contract(
+      const erc20ProviderContract = new ethers.Contract(
         ERC20_CONTRACT_ADDR,
         MTT_ERC20_ABI,
         ethersProvider
@@ -76,7 +91,7 @@ const Erc20Provider = () => {
         signer
       );
 
-      setErc20ProviderContract(erc20Contract);
+      setErc20ProviderContract(erc20ProviderContract);
       setErc20SignerContract(erc20SignerContract);
 
       const faucetContract = new ethers.Contract(
@@ -99,16 +114,21 @@ const Erc20Provider = () => {
   }, [erc20ProviderContract]);
 
   async function initToken() {
-    if (erc20ProviderContract) {
-      const symbol = await erc20ProviderContract.symbol();
-      const name = await erc20ProviderContract.name();
-      const decimalsBigInt = await erc20ProviderContract.decimals();
+    if (erc20ProviderContract && ethersProvider) {
+      const code = await ethersProvider.getCode(ERC20_CONTRACT_ADDR);
 
-      setTokenInfo({
-        name,
-        symbol,
-        decimals: decimalsBigInt,
-      });
+      // 确保交互的是个部署到链上的合约
+      if (code !== '0x') {
+        const symbol = await erc20ProviderContract.symbol();
+        const name = await erc20ProviderContract.name();
+        const decimalsBigInt = await erc20ProviderContract.decimals();
+
+        setTokenInfo({
+          name,
+          symbol,
+          decimals: decimalsBigInt,
+        });
+      }
     }
   }
 

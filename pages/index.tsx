@@ -1,15 +1,16 @@
 import { Stack } from '@mui/material';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
+  router.push('/erc20');
+
   return (
     <Stack
       flexDirection={'row'}
       sx={{
         height: '100vh',
       }}
-    >
-      首页
-    </Stack>
+    ></Stack>
   );
 }

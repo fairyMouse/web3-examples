@@ -40,8 +40,11 @@ const TokenFaucet = () => {
         updateFaucetReceiveState();
         updateMyBalance();
       } catch (error: any) {
-        console.log(error.toString());
-        toast.error(123);
+        let msg = 'unknown error';
+        if (error.info?.error) {
+          msg = error.info?.error.message;
+        }
+        toast.error(msg);
       }
     }
     setReceiving(false);

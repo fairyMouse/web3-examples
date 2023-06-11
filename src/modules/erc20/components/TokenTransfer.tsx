@@ -26,6 +26,29 @@ const TokenTransfer = () => {
     updateMyBalance();
   }, [account, tokenInfo, erc20ProviderContract]);
 
+  useEffect(() => {
+    if (erc20ProviderContract) {
+      const fromMe = erc20ProviderContract.filters.Transfer(account, null);
+      const toMe = erc20ProviderContract.filters.Transfer(null, account);
+
+      console.log('fromMe:', fromMe);
+
+      // 监听我给别人转账事件
+      erc20ProviderContract.on(fromMe, payload => {
+        console.log('我给别人转账了:', payload);
+      });
+      // 监听别人给我转账事件
+      erc20ProviderContract.on(toMe, payload => {
+        console.log('别人给我转账了:', payload);
+      });
+
+      return () => {
+        erc20ProviderContract.removeAllListeners(fromMe);
+        erc20ProviderContract.removeAllListeners(toMe);
+      };
+    }
+  }, [account, erc20ProviderContract]);
+
   const [transferring, setTransferring] = useState<boolean>(false);
 
   const schema = Yup.object().shape({
@@ -78,6 +101,7 @@ const TokenTransfer = () => {
           Current Balance: {`${balance || 0} MTT`}
         </Typography>
 
+        {/* 这里可以做成监听我给别人转账、别人给我转账来自动更新，但我感觉还是有个手动刷新比较放心 */}
         <LoadingButton
           size="small"
           variant="outlined"
