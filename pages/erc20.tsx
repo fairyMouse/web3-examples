@@ -16,6 +16,7 @@ import {
 } from 'src/constants/wallet';
 import { IErc20Context, IMyTokenInfo } from '@/src/modules/erc20/types';
 import Erc20Index from '@/src/modules/erc20/Erc20Index';
+import Erc20AirdropProvider from '@/src/modules/erc20/Erc20AirdropProvider';
 
 export const Erc20Context = createContext<IErc20Context | null>(null);
 
@@ -159,7 +160,9 @@ const Erc20Provider = () => {
         faucetSignerContract,
       }}
     >
-      <Erc20Index />
+      <Erc20AirdropProvider>
+        <Erc20Index />
+      </Erc20AirdropProvider>
     </Erc20Context.Provider>
   );
 };

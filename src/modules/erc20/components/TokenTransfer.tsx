@@ -31,8 +31,6 @@ const TokenTransfer = () => {
       const fromMe = erc20ProviderContract.filters.Transfer(account, null);
       const toMe = erc20ProviderContract.filters.Transfer(null, account);
 
-      console.log('fromMe:', fromMe);
-
       // 监听我给别人转账事件
       erc20ProviderContract.on(fromMe, payload => {
         console.log('我给别人转账了:', payload);

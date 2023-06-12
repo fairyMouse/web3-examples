@@ -18,3 +18,8 @@ export interface IErc20Context {
   faucetProviderContract: ethers.Contract | null;
   faucetSignerContract: ethers.Contract | null;
 }
+
+export interface IErc20AirdropContext {
+  airdropProviderContract: ethers.Contract | null;
+  airdropSignerContract: ethers.Contract | null;
+}

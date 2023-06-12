@@ -7,7 +7,7 @@ import TokenBasicInfo from './components/TokenBasicInfo';
 import { useErc20Context } from '@/pages/erc20';
 import TokenFaucet from './components/TokenFaucet';
 import { Network } from 'ethers';
-import TokenAirdrop from './components/TokenAirdrop';
+import TokenAirdrop from './components/airdrop/AirdropIndex';
 
 const Erc20Index = () => {
   const { account, setAccount, ethersProvider } = useErc20Context();

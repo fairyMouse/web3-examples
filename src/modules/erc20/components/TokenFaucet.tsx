@@ -1,4 +1,5 @@
 import { useErc20Context } from '@/pages/erc20';
+import handleError from '@/src/utils/handleError';
 import { LoadingButton } from '@mui/lab';
 import { Alert, Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -40,11 +41,7 @@ const TokenFaucet = () => {
         updateFaucetReceiveState();
         updateMyBalance();
       } catch (error: any) {
-        let msg = 'unknown error';
-        if (error.info?.error) {
-          msg = error.info?.error.message;
-        }
-        toast.error(msg);
+        handleError(error);
       }
     }
     setReceiving(false);
