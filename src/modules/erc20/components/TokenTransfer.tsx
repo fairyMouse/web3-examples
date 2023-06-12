@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { RHFTextField } from '@/src/components/hook-form';
 import { useErc20Context } from '@/pages/erc20';
 import FormProvider from '@/src/components/hook-form/FormProvider';
+import handleError from '@/src/utils/handleError';
 
 const TokenTransfer = () => {
   const {
@@ -90,6 +91,27 @@ const TokenTransfer = () => {
     }
   }
 
+  const [amountInput, setAmountInput] = useState('');
+  const [targetBalanceLoading, setTargetBalanceLoading] = useState(false);
+  const [targetBalance, setTargetBalance] = useState('');
+
+  const queryTargetBalance = async (targetAccount: string) => {
+    if (erc20ProviderContract && tokenInfo) {
+      try {
+        setTargetBalanceLoading(true);
+        const res = await erc20ProviderContract.balanceOf(targetAccount);
+
+        const tokenBalance = ethers.formatUnits(res, tokenInfo.decimals);
+        setTargetBalance(tokenBalance);
+      } catch (error: any) {
+        handleError(error);
+        setTargetBalance('');
+      } finally {
+        setTargetBalanceLoading(false);
+      }
+    }
+  };
+
   return (
     <Card sx={{ p: 3 }}>
       <Typography variant="h4"> Transfer </Typography>
@@ -114,7 +136,7 @@ const TokenTransfer = () => {
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} sx={{ mt: 2 }}>
           <RHFTextField
-            placeholder="target address"
+            placeholder="Target address"
             size="small"
             name="targetAddress"
           ></RHFTextField>
@@ -132,6 +154,33 @@ const TokenTransfer = () => {
           </LoadingButton>
         </Stack>
       </FormProvider>
+
+      <Stack spacing={1} sx={{ mt: 3 }}>
+        <Stack flexDirection={'row'} gap={2} alignItems={'center'}>
+          <TextField
+            sx={{ flex: 1 }}
+            size="small"
+            label="Enter target address"
+            placeholder="Query the balance of the specified address"
+            value={amountInput}
+            onChange={e => {
+              setAmountInput(e.target.value);
+            }}
+          />
+          <LoadingButton
+            onClick={() => {
+              if (amountInput) {
+                queryTargetBalance(amountInput);
+              }
+            }}
+            loading={targetBalanceLoading}
+            sx={{ ml: 'auto' }}
+          >
+            query
+          </LoadingButton>
+        </Stack>
+        <Typography variant="body1">{`${targetBalance || 0} MTT`}</Typography>
+      </Stack>
     </Card>
   );
 };
