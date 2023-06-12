@@ -6,6 +6,7 @@ import { ParentItemProps, MegaMenuItemProps } from './types';
 
 import Iconify from '../iconify';
 import { StyledIcon } from './styles';
+import { useRouter } from 'next/router';
 
 const PARENT_ITEM_HEIGHT = 60;
 
@@ -33,10 +34,15 @@ function ParentItem({
   path = '',
   title,
   icon,
-  open,
+  isActive,
   hasSub,
   ...other
 }: ParentItemProps) {
+  const router = useRouter();
+
+  const pathname = router.pathname || '/';
+  const match = pathname.match(new RegExp(`^${path}$`));
+
   const activeStyle = {
     color: 'primary.main',
     bgcolor: (theme: Theme) =>
@@ -59,7 +65,7 @@ function ParentItem({
         textTransform: 'capitalize',
         transition: theme => theme.transitions.create('all'),
         '&:hover': activeStyle,
-        ...(open && activeStyle),
+        ...(match && activeStyle),
       }}
       {...other}
     >

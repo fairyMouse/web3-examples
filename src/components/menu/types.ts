@@ -29,7 +29,7 @@ export type ParentItemProps = {
   title: string;
   path?: string;
   icon?: React.ReactElement;
-  open?: boolean;
+  isActive?: boolean;
   hasSub?: boolean;
   onClick?: VoidFunction;
   onMouseEnter?: VoidFunction;

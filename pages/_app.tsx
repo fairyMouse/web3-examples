@@ -9,10 +9,15 @@ import Iconify from '@/src/components/iconify/Iconify';
 import MenuDesktopVertical from '@/src/components/menu/MenuDesktopVertical';
 
 export default function App({ Component, pageProps }: AppProps) {
-  const menuData = [
+  const menus = [
     {
       title: 'ERC 20',
       path: '/erc20',
+      icon: <Iconify icon="gala:apple" sx={{ mb: '2px' }} />,
+    },
+    {
+      title: 'ERC 721',
+      path: '/erc721',
       icon: <Iconify icon="gala:apple" sx={{ mb: '2px' }} />,
     },
   ];
@@ -24,7 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
           height: '100vh',
         }}
       >
-        <MenuDesktopVertical data={menuData} sx={{ width: 200 }} />
+        <MenuDesktopVertical data={menus} sx={{ width: 200 }} />
 
         <Stack sx={{ flex: 1, bgcolor: 'grey.50' }}>
           <Component {...pageProps} />
