@@ -7,6 +7,7 @@ import TokenBasicInfo from './components/TokenBasicInfo';
 import { useErc20Context } from '@/pages/erc20';
 import TokenFaucet from './components/TokenFaucet';
 import { Network } from 'ethers';
+import TokenAirdrop from './components/TokenAirdrop';
 
 const Erc20Index = () => {
   const { account, setAccount, ethersProvider } = useErc20Context();
@@ -76,7 +77,7 @@ const Erc20Index = () => {
         </Stack>
         {network && (
           <Stack flexDirection={'row'} gap={1}>
-            <Typography variant="subtitle1">network: </Typography>
+            <Typography variant="subtitle1">Network: </Typography>
             <Typography variant="body2">{network.name}</Typography>
           </Stack>
         )}
@@ -93,6 +94,7 @@ const Erc20Index = () => {
         <TokenBasicInfo />
         {account && <TokenTransfer />}
         {account && <TokenFaucet />}
+        {account && <TokenAirdrop />}
       </Box>
     </Container>
   );

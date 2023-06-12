@@ -5,8 +5,17 @@ import { Stack } from '@mui/material';
 import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import Iconify from '@/src/components/iconify/Iconify';
+import MenuDesktopVertical from '@/src/components/menu/MenuDesktopVertical';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const menuData = [
+    {
+      title: 'ERC 20',
+      path: '/erc20',
+      icon: <Iconify icon="gala:apple" sx={{ mb: '2px' }} />,
+    },
+  ];
   return (
     <ThemeProvider>
       <Stack
@@ -15,9 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
           height: '100vh',
         }}
       >
-        <Stack sx={{ width: 240, height: 800 }} alignItems={'center'}>
-          <Link href={'/erc20'}>ERC 20</Link>
-        </Stack>
+        <MenuDesktopVertical data={menuData} sx={{ width: 200 }} />
 
         <Stack sx={{ flex: 1, bgcolor: 'grey.50' }}>
           <Component {...pageProps} />
