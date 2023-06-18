@@ -20,7 +20,6 @@ const nextConfig = {
       // 这是一个例子，如果我们在服务器端，我们可能想要做一些不同的配置
     }
 
-    console.log(config.module.rules);
     return merge(config, customConfig);
   },
 };

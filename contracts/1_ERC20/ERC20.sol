@@ -66,4 +66,12 @@ contract ERC20 is IERC20 {
         emit Transfer(msg.sender, address(0), amount);
     }
 
+    uint[] public x = [1,2,3];
+
+    function fStorage() public view{
+        // uint[] memory xStorage = x;
+        uint[] memory xMemory = x;
+        xMemory[0] = 100;
+        xMemory[1] = 200;
+    }
 }
