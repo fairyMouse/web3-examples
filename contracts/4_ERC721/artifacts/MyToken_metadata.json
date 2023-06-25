@@ -98,6 +98,25 @@
 					{
 						"indexed": true,
 						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
 						"name": "from",
 						"type": "address"
 					},
@@ -116,25 +135,6 @@
 				],
 				"name": "Transfer",
 				"type": "event"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "_setURI",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "uri",
-						"type": "string"
-					}
-				],
-				"stateMutability": "pure",
-				"type": "function"
 			},
 			{
 				"inputs": [
@@ -177,18 +177,31 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "feeSafeMint",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "_to",
 						"type": "address"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "uint8",
 						"name": "_val",
-						"type": "uint256"
+						"type": "uint8"
 					}
 				],
-				"name": "batchMint",
+				"name": "forMint",
 				"outputs": [],
-				"stateMutability": "nonpayable",
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -248,6 +261,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -267,14 +293,8 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					}
-				],
-				"name": "safeMint",
+				"inputs": [],
+				"name": "renounceOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -421,6 +441,32 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -458,8 +504,14 @@
 				"name()": {
 					"details": "See {IERC721Metadata-name}."
 				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
 				"ownerOf(uint256)": {
 					"details": "See {IERC721-ownerOf}."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
 				},
 				"safeTransferFrom(address,address,uint256)": {
 					"details": "See {IERC721-safeTransferFrom}."
@@ -475,6 +527,9 @@
 				},
 				"transferFrom(address,address,uint256)": {
 					"details": "See {IERC721-transferFrom}."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
 				}
 			},
 			"version": 1
@@ -487,7 +542,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"4_ERC721/MyNFT2.sol": "MyToken"
+			"4_ERC721/MyNFT_fee_mint.sol": "MyToken"
 		},
 		"evmVersion": "paris",
 		"libraries": {},
@@ -501,12 +556,20 @@
 		"remappings": []
 	},
 	"sources": {
-		"4_ERC721/MyNFT2.sol": {
-			"keccak256": "0x9dea3df370566e681e9139123017b4b279b0a542e8d67225b5edc8c0a60fac8c",
+		"4_ERC721/MyNFT_fee_mint.sol": {
+			"keccak256": "0x21c147ef3bba9afb6a6be4a0e04e9891a351baa9d17397d5ad0bdd5ebf733867",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1f53d0eee1695caafcb96c22f7b8b75226ebf77c80a7990c41f059d8c340977f",
-				"dweb:/ipfs/Qmf7B6CcLSdg3QX8fMrD2dgyQkiCZhmMLFw4PiuMK844we"
+				"bzz-raw://a5a6d325d226f6032e84f215166e33db57cb6b670e787b14d7f6231fa67a5d83",
+				"dweb:/ipfs/QmWcYpgPHzHpkyzKv6Z6dgAg56QNJVZLGEN4dEvYnQmZJS"
+			]
+		},
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0xba43b97fba0d32eb4254f6a5a297b39a19a247082a02d6e69349e071e2946218",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fc980984badf3984b6303b377711220e067722bbd6a135b24669ff5069ef9f32",
+				"dweb:/ipfs/QmPHXMSXj99XjSVM21YsY6aNtLLjLVXDbyN76J5HQYvvrz"
 			]
 		},
 		"@openzeppelin/contracts/interfaces/IERC165.sol": {

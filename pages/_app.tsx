@@ -2,11 +2,11 @@ import 'windi.css';
 import ThemeProvider from '@/src/theme';
 import type { AppProps } from 'next/app';
 import { Stack } from '@mui/material';
-import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Iconify from '@/src/components/iconify/Iconify';
 import MenuDesktopVertical from '@/src/components/menu/MenuDesktopVertical';
+import 'src/modules/erc721/style.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const menus = [

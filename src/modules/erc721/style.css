@@ -1,0 +1,13 @@
+:root {
+  --main-color: #225fda;
+  /* 基础的内间距单元 */
+  --spacing-unit: 8px;
+}
+
+.button {
+  background-color: var(--main-color);
+  /* 生效 */
+  padding: var(--spacing-unit);
+  /* 不生效 */
+  padding: 2 * var(--spacing-unit);
+}
