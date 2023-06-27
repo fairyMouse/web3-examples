@@ -78,6 +78,6 @@ contract MyNftFeeMint is ERC721, ERC721URIStorage,Ownable {
     // 取钱（加onlyOwner保证只能自己取）
     function withdraw(address _to) public onlyOwner{
         (bool success,) = _to.call{value:address(this).balance}("");
-        require(success, "feild");
+        require(success, "failed");
     }
 }
