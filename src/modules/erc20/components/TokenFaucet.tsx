@@ -1,9 +1,8 @@
-import { useErc20Context } from '@/pages/erc20';
-import handleError from '@/src/utils/handleError';
-import { LoadingButton } from '@mui/lab';
-import { Alert, Card, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useErc20Context } from "@/pages/erc20";
+import handleError from "@/src/utils/handleError";
+import { LoadingButton } from "@mui/lab";
+import { Alert, Card, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const TokenFaucet = () => {
   const {
@@ -30,13 +29,14 @@ const TokenFaucet = () => {
   }
 
   async function receiveCoins() {
+    console.log("receiveCoins");
     setReceiving(true);
     if (faucetSignerContract) {
       try {
         const res = await faucetSignerContract.requestTokens();
-        console.log('请求水龙头结果:', res);
+        console.log("请求水龙头结果:", res);
         const receipt = await res.wait();
-        console.log('请求水龙头收据信息:', receipt);
+        console.log("请求水龙头收据信息:", receipt);
 
         updateFaucetReceiveState();
         updateMyBalance();
@@ -62,7 +62,7 @@ const TokenFaucet = () => {
             onClick={receiveCoins}
             disabled={faucetReceived}
           >
-            {faucetReceived ? 'Already Received' : 'Receive'}
+            {faucetReceived ? "Already Received" : "Receive"}
           </LoadingButton>
         </Stack>
       )}

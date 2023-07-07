@@ -1,12 +1,12 @@
-import NextLink from 'next/link';
-import { alpha, SxProps, Theme } from '@mui/material/styles';
-import { Link, List, Paper, ListItem } from '@mui/material';
+import NextLink from "next/link";
+import { alpha, SxProps, Theme } from "@mui/material/styles";
+import { Link, List, Paper, ListItem, Typography } from "@mui/material";
 // @types
-import { ParentItemProps, MegaMenuItemProps } from './types';
+import { ParentItemProps, MegaMenuItemProps } from "./types";
 
-import Iconify from '../iconify';
-import { StyledIcon } from './styles';
-import { useRouter } from 'next/router';
+import Iconify from "../iconify";
+import { StyledIcon } from "./styles";
+import { useRouter } from "next/router";
 
 const PARENT_ITEM_HEIGHT = 60;
 
@@ -31,7 +31,7 @@ export default function MenuDesktopVertical({ data, ...other }: Props) {
 }
 
 function ParentItem({
-  path = '',
+  path = "",
   title,
   icon,
   isActive,
@@ -40,11 +40,11 @@ function ParentItem({
 }: ParentItemProps) {
   const router = useRouter();
 
-  const pathname = router.pathname || '/';
+  const pathname = router.pathname || "/";
   const match = pathname.match(new RegExp(`^${path}$`));
 
   const activeStyle = {
-    color: 'primary.main',
+    color: "primary.main",
     bgcolor: (theme: Theme) =>
       alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
   };
@@ -56,21 +56,23 @@ function ParentItem({
       component={NextLink}
       sx={{
         height: PARENT_ITEM_HEIGHT,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-        color: 'text.primary',
-        typography: 'subtitle1',
-        textTransform: 'capitalize',
-        transition: theme => theme.transitions.create('all'),
-        '&:hover': activeStyle,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+        color: "text.primary",
+        typography: "subtitle1",
+        textTransform: "capitalize",
+        transition: theme => theme.transitions.create("all"),
+        "&:hover": activeStyle,
         ...(match && activeStyle),
       }}
       {...other}
     >
       {icon && <StyledIcon>{icon}</StyledIcon>}
-      {title}
+      <Typography variant="subtitle1" sx={{ flex: 1 }}>
+        {title}
+      </Typography>
 
       {hasSub && <Iconify icon="eva:chevron-right-fill" sx={{ ml: 1 }} />}
     </ListItem>

@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chainlink/contracts": "^0.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.1.0",
@@ -23,6 +24,7 @@
     "@types/react-dom": "18.2.0",
     "dayjs": "^1.11.8",
     "ethers": "^6.5.1",
+    "hardhat": "^2.16.1",
     "merkletreejs": "^0.3.10",
     "next": "13.3.1",
     "react": "18.2.0",
