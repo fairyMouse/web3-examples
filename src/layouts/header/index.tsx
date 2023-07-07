@@ -5,9 +5,11 @@ const Header = () => {
   return (
     <AppBar
       sx={{
+        boxShadow: "none",
         height: HEADER.H_MAIN_DESKTOP,
         px: 5,
         width: `calc(100% - ${NAV.W_DASHBOARD + 1}px)`,
+        bgcolor: "background.default",
       }}
     >
       <Stack

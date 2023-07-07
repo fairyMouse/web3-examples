@@ -17,7 +17,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <Menu />
         <Stack sx={{ flex: 1 }}>
           <Header />
-          <Stack sx={{ bgcolor: "grey.50", pt: `${HEADER.H_MAIN_DESKTOP}px` }}>
+          <Stack
+            sx={{
+              bgcolor: "grey.50",
+              py: `${HEADER.H_MAIN_DESKTOP}px`,
+            }}
+          >
             <Component {...pageProps} />
           </Stack>
         </Stack>
