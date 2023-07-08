@@ -16,18 +16,18 @@ const NFTCard = (props: INFTCardProps) => {
   const { uri } = data;
   console.log("data:", data);
 
+  // 还差自己的ID、等级、父母ID信息展示
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={uri} title="green iguana" />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-      </CardContent>
+    <Card sx={{ maxWidth: 280 }}>
+      <CardMedia
+        sx={{
+          height: 240,
+          backgroundSize: "contain",
+        }}
+        image={uri}
+        title="green iguana"
+      />
+
       <CardActions>
         <Button size="small">Share</Button>
         <Button size="small">Learn More</Button>

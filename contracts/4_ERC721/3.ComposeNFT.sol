@@ -25,7 +25,7 @@ contract ComposeNFT is ERC721, ERC721Enumerable, ERC721URIStorage {
     constructor() ERC721("Compsoe NFT ", "CN") {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://raw.githubusercontent.com/qdwds/NFT-metadata/master/metadata/donkey/";
+        return "https://raw.githubusercontent.com/qdwds/NFT-metadata/master/metadata/donkeys/";
     }
     function _setURI(uint256 _level) internal view  returns (string memory uri) {
         uint random = _random(100);
@@ -89,6 +89,9 @@ contract ComposeNFT is ERC721, ERC721Enumerable, ERC721URIStorage {
         _interSafeMint(msg.sender, dad.level + 1, dad.tokenId, mum.tokenId);
     }
 
+
+
+
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
@@ -114,7 +117,7 @@ contract ComposeNFT is ERC721, ERC721Enumerable, ERC721URIStorage {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable, ERC721URIStorage)
+        override(ERC721, ERC721Enumerable,ERC721URIStorage)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
