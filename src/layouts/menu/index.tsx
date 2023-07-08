@@ -1,6 +1,6 @@
 import Logo from "@/src/components/logo/Logo";
 import MenuDesktopVertical from "@/src/components/menu/MenuDesktopVertical";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import menuConfig from "./config";
 import { NAV } from "@/src/constants/layouts";
 
@@ -21,6 +21,7 @@ const Menu = () => {
           left: 0,
           top: 0,
           width: NAV.W_DASHBOARD,
+          borderRight: theme => `dashed 1px ${theme.palette.divider}`,
         }}
       >
         <Box

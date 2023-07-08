@@ -1,11 +1,13 @@
-import { Stack } from '@mui/material';
+import { LoadingButton } from "@mui/lab";
+import { Container, Stack } from "@mui/material";
 
 const Erc721Index = () => {
   return (
-    <Stack>
-      Erc721Index
-      <div className="button">test</div>
-    </Stack>
+    <Container>
+      <Stack flexDirection={"row"} justifyContent={"center"} sx={{ mt: 4 }}>
+        <LoadingButton sx={{ width: 120 }}>Mint</LoadingButton>
+      </Stack>
+    </Container>
   );
 };
 

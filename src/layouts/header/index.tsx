@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 const Header = () => {
   const { ethersProvider, account, setAccount } = useWalletContext();
 
+  const disconnectText = "disconnect";
   const [buttonText, setButtonText] = useState("");
   const [connecting, setConnecting] = useState(false);
 
@@ -89,10 +90,12 @@ const Header = () => {
             <Button
               variant="outlined"
               onClick={walletDisconnect}
-              onMouseEnter={() => setButtonText("disconnect")}
+              onMouseEnter={() => setButtonText(disconnectText)}
               onMouseLeave={() => setButtonText(account)}
             >
-              {`${buttonText.slice(0, 6)}...${buttonText.slice(-4)}`}
+              {buttonText === disconnectText
+                ? disconnectText
+                : `${buttonText.slice(0, 6)}...${buttonText.slice(-4)}`}
             </Button>
           ) : (
             <LoadingButton

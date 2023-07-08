@@ -5,7 +5,6 @@ import { Stack } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
-import "src/modules/erc721/style.css";
 import Header from "@/src/layouts/header";
 import Menu from "@/src/layouts/menu";
 import { HEADER } from "@/src/constants/layouts";
@@ -17,10 +16,11 @@ export default function App({ Component, pageProps }: AppProps) {
       <WalletProvider>
         <Stack flexDirection={"row"}>
           <Menu />
-          <Stack sx={{ flex: 1 }}>
+          <Stack sx={{ flex: 1, minHeight: "100vh" }}>
             <Header />
             <Stack
               sx={{
+                flex: 1,
                 bgcolor: "grey.50",
                 py: `${HEADER.H_MAIN_DESKTOP}px`,
               }}

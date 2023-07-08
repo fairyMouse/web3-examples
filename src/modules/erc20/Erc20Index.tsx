@@ -1,4 +1,4 @@
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 
 import TokenTransfer from "./components/TokenTransfer";
 import TokenBasicInfo from "./components/TokenBasicInfo";
