@@ -38,6 +38,8 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.0.1",
+    "url-loader": "^4.1.1",
     "windicss-webpack-plugin": "^1.7.8"
   }
 }

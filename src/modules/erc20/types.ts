@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { ethers } from "ethers";
 
 export interface IMyTokenInfo {
   name: string;
@@ -12,7 +12,6 @@ export interface IErc20Context {
   balance: string;
   myBalanceLoading: boolean;
   updateMyBalance: () => void;
-  ethersProvider: ethers.BrowserProvider | null;
   erc20ProviderContract: ethers.Contract | null;
   erc20SignerContract: ethers.Contract | null;
   faucetProviderContract: ethers.Contract | null;

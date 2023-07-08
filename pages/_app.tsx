@@ -9,25 +9,28 @@ import "src/modules/erc721/style.css";
 import Header from "@/src/layouts/header";
 import Menu from "@/src/layouts/menu";
 import { HEADER } from "@/src/constants/layouts";
+import WalletProvider from "@/src/provider/WalletProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
-      <Stack flexDirection={"row"}>
-        <Menu />
-        <Stack sx={{ flex: 1 }}>
-          <Header />
-          <Stack
-            sx={{
-              bgcolor: "grey.50",
-              py: `${HEADER.H_MAIN_DESKTOP}px`,
-            }}
-          >
-            <Component {...pageProps} />
+      <WalletProvider>
+        <Stack flexDirection={"row"}>
+          <Menu />
+          <Stack sx={{ flex: 1 }}>
+            <Header />
+            <Stack
+              sx={{
+                bgcolor: "grey.50",
+                py: `${HEADER.H_MAIN_DESKTOP}px`,
+              }}
+            >
+              <Component {...pageProps} />
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
-      <ToastContainer theme="light" limit={2} pauseOnFocusLoss={false} />
+        <ToastContainer theme="light" limit={2} pauseOnFocusLoss={false} />
+      </WalletProvider>
     </ThemeProvider>
   );
 }

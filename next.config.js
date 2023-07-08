@@ -1,7 +1,7 @@
-const { merge } = require('webpack-merge');
-const path = require('path');
+const { merge } = require("webpack-merge");
+const path = require("path");
 
-const WindiCSSWebpackPlugin = require('windicss-webpack-plugin');
+const WindiCSSWebpackPlugin = require("windicss-webpack-plugin");
 
 const nextConfig = {
   reactStrictMode: true,
@@ -9,10 +9,19 @@ const nextConfig = {
     const customConfig = {
       resolve: {
         alias: {
-          src: path.resolve(__dirname, 'src/'),
+          src: path.resolve(__dirname, "src/"),
         },
       },
       plugins: [new WindiCSSWebpackPlugin()],
+      module: {
+        rules: [
+          {
+            test: /\.svg$/i,
+            issuer: { and: [/\.(js|ts)x?$/] },
+            loader: require.resolve("@svgr/webpack", "url-loader"),
+          },
+        ],
+      },
     };
 
     // 修改一些现有的配置
