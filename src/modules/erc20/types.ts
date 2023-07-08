@@ -6,8 +6,6 @@ export interface IMyTokenInfo {
   decimals: ethers.BigNumberish;
 }
 export interface IErc20Context {
-  account: string;
-  setAccount: (account: string) => void;
   tokenInfo: IMyTokenInfo | null;
   balance: string;
   myBalanceLoading: boolean;

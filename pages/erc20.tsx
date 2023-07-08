@@ -22,7 +22,7 @@ export const useErc20Context = () => {
 };
 
 const Erc20Provider = () => {
-  const { ethersProvider } = useWalletContext();
+  const { ethersProvider, account } = useWalletContext();
   // 为了ERC20合约的读写
   const [erc20ProviderContract, setErc20ProviderContract] =
     useState<ethers.Contract | null>(null);
@@ -36,7 +36,7 @@ const Erc20Provider = () => {
     useState<ethers.Contract | null>(null);
 
   const [tokenInfo, setTokenInfo] = useState<IMyTokenInfo | null>(null);
-  const [account, setAccount] = useState("");
+
   const [balance, setBalance] = useState("");
   const [myBalanceLoading, setMyBalanceLoading] = useState(false);
 
@@ -114,8 +114,6 @@ const Erc20Provider = () => {
   return (
     <Erc20Context.Provider
       value={{
-        account,
-        setAccount,
         tokenInfo,
         balance,
         myBalanceLoading,

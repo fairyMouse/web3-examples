@@ -13,10 +13,13 @@ import {
 import { Network } from "ethers";
 import { useEffect, useState } from "react";
 import Iconify from "@/src/components/iconify/Iconify";
+import { toast } from "react-toastify";
 
 const Header = () => {
-  const { ethersProvider } = useWalletContext();
+  const { ethersProvider, account, setAccount } = useWalletContext();
+
   const [buttonText, setButtonText] = useState("");
+  const [connecting, setConnecting] = useState(false);
 
   const [network, setNetwork] = useState<Network | null>(null);
 
@@ -28,7 +31,33 @@ const Header = () => {
     }
   }, [ethersProvider]);
 
-  console.log("network:", network);
+  useEffect(() => {
+    setButtonText(account);
+  }, [account]);
+
+  useEffect(() => {
+    connectToMetamask();
+  }, [ethersProvider]);
+
+  const connectToMetamask = async () => {
+    setConnecting(true);
+    if (ethersProvider) {
+      try {
+        const accounts = await ethersProvider.send("eth_requestAccounts", []);
+
+        setAccount(accounts[0]);
+      } catch (error) {
+        console.log(error);
+        toast.error("failed to connect to metamask");
+      }
+    }
+
+    setConnecting(false);
+  };
+
+  const walletDisconnect = () => {
+    setAccount("");
+  };
   return (
     <AppBar
       sx={{
@@ -55,26 +84,26 @@ const Header = () => {
             {capitalize(network.name)}
           </Button>
         )}
-        {/* <Stack sx={{ width: 200, mt: 5 }}>
-            {account ? (
-              <Button
-                variant="outlined"
-                onClick={walletDisconnect}
-                onMouseEnter={() => setButtonText("disconnect")}
-                onMouseLeave={() => setButtonText(account)}
-              >
-                {`${buttonText.slice(0, 4)}...${buttonText.slice(-4)}`}
-              </Button>
-            ) : (
-              <LoadingButton
-                variant="contained"
-                loading={connecting}
-                onClick={connectToMetamask}
-              >
-                connect metamask to see more
-              </LoadingButton>
-            )}
-          </Stack> */}
+        <Stack sx={{ width: 200 }}>
+          {account ? (
+            <Button
+              variant="outlined"
+              onClick={walletDisconnect}
+              onMouseEnter={() => setButtonText("disconnect")}
+              onMouseLeave={() => setButtonText(account)}
+            >
+              {`${buttonText.slice(0, 6)}...${buttonText.slice(-4)}`}
+            </Button>
+          ) : (
+            <LoadingButton
+              variant="contained"
+              loading={connecting}
+              onClick={connectToMetamask}
+            >
+              connect metamask
+            </LoadingButton>
+          )}
+        </Stack>
       </Stack>
     </AppBar>
   );

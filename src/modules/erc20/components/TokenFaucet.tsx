@@ -1,12 +1,13 @@
 import { useErc20Context } from "@/pages/erc20";
+import { useWalletContext } from "@/src/provider/WalletProvider";
 import handleError from "@/src/utils/handleError";
 import { LoadingButton } from "@mui/lab";
 import { Alert, Card, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const TokenFaucet = () => {
+  const { account } = useWalletContext();
   const {
-    account,
     tokenInfo,
     faucetProviderContract,
     faucetSignerContract,

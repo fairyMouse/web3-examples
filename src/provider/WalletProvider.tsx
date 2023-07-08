@@ -18,6 +18,7 @@ type Props = { children: React.ReactNode };
 const WalletProvider = ({ children }: Props) => {
   const [ethersProvider, setEthersProvider] =
     useState<ethers.BrowserProvider | null>(null);
+  const [account, setAccount] = useState("");
 
   useEffect(() => {
     if (!window.ethereum) {
@@ -44,7 +45,7 @@ const WalletProvider = ({ children }: Props) => {
   }, []);
 
   return (
-    <WalletContext.Provider value={{ ethersProvider }}>
+    <WalletContext.Provider value={{ account, setAccount, ethersProvider }}>
       {children}
     </WalletContext.Provider>
   );
