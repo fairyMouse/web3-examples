@@ -1,5 +1,6 @@
-import Erc721Index from '@/src/modules/erc721/Erc721Index';
-import { Stack } from '@mui/material';
+import Erc721Index from "@/src/modules/erc721/Erc721Index";
+import { Stack } from "@mui/material";
+import RandomNFT_ABI from "src/constants/abi/RandomNFT.abi.json";
 
 const Erc721 = () => {
   return (

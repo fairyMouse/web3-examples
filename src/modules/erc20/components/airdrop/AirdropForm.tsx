@@ -1,17 +1,17 @@
-import { Stack, TextField } from '@mui/material';
-import { useErc20AirdropContext } from '../../Erc20AirdropProvider';
-import { LoadingButton } from '@mui/lab';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { RHFTextField } from '@/src/components/hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import FormProvider from '@/src/components/hook-form/FormProvider';
-import handleError from '@/src/utils/handleError';
-import { ERC20_CONTRACT_ADDR } from '@/src/constants/wallet';
-import { toast } from 'react-toastify';
-import { useErc20Context } from '@/pages/erc20';
-import { ethers } from 'ethers';
+import { Stack, TextField } from "@mui/material";
+import { useErc20AirdropContext } from "../../../../provider/Erc20AirdropProvider";
+import { LoadingButton } from "@mui/lab";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { RHFTextField } from "@/src/components/hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import FormProvider from "@/src/components/hook-form/FormProvider";
+import handleError from "@/src/utils/handleError";
+import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
+import { toast } from "react-toastify";
+import { useErc20Context } from "src/provider/Erc20Provider";
+import { ethers } from "ethers";
 
 interface IAirdropFormProps {
   updateAllowanceForAirdrop: () => Promise<void>;
@@ -24,8 +24,8 @@ const AirdropForm = (props: IAirdropFormProps) => {
   const { airdropSignerContract } = useErc20AirdropContext();
   const [airdropping, setAirdropping] = useState(false);
   const schema = Yup.object().shape({
-    addresses: Yup.string().required('target address is required'),
-    amount: Yup.string().required('amount is required'),
+    addresses: Yup.string().required("target address is required"),
+    amount: Yup.string().required("amount is required"),
   });
 
   const methods = useForm<{
@@ -33,7 +33,7 @@ const AirdropForm = (props: IAirdropFormProps) => {
     amount: string;
   }>({
     resolver: yupResolver(schema),
-    defaultValues: { addresses: '', amount: '' },
+    defaultValues: { addresses: "", amount: "" },
   });
 
   const { watch, setValue, reset, handleSubmit } = methods;
@@ -46,7 +46,7 @@ const AirdropForm = (props: IAirdropFormProps) => {
       return;
     }
 
-    const addressArr = addresses.split(',');
+    const addressArr = addresses.split(",");
     const value = ethers.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
     const amountArr = addressArr.map(item => value);
 
@@ -59,14 +59,14 @@ const AirdropForm = (props: IAirdropFormProps) => {
           addressArr,
           amountArr
         );
-        console.log('空投结果信息:', res);
+        console.log("空投结果信息:", res);
         const receipt = await res.wait();
-        console.log('空投收据信息:', receipt);
+        console.log("空投收据信息:", receipt);
 
         reset();
         updateAllowanceForAirdrop();
 
-        toast.success('Successful airdrop!');
+        toast.success("Successful airdrop!");
       } catch (error) {
         handleError(error);
       } finally {

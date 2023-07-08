@@ -1,15 +1,15 @@
-import * as Yup from 'yup';
-import { Card, IconButton, Stack, TextField, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-import { LoadingButton } from '@mui/lab';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { toast } from 'react-toastify';
-import { RHFTextField } from '@/src/components/hook-form';
-import { useErc20Context } from '@/pages/erc20';
-import FormProvider from '@/src/components/hook-form/FormProvider';
-import handleError from '@/src/utils/handleError';
+import * as Yup from "yup";
+import { Card, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { LoadingButton } from "@mui/lab";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import { RHFTextField } from "@/src/components/hook-form";
+import { useErc20Context } from "src/provider/Erc20Provider";
+import FormProvider from "@/src/components/hook-form/FormProvider";
+import handleError from "@/src/utils/handleError";
 
 const TokenTransfer = () => {
   const {
@@ -34,11 +34,11 @@ const TokenTransfer = () => {
 
       // 监听我给别人转账事件
       erc20ProviderContract.on(fromMe, payload => {
-        console.log('我给别人转账了:', payload);
+        console.log("我给别人转账了:", payload);
       });
       // 监听别人给我转账事件
       erc20ProviderContract.on(toMe, payload => {
-        console.log('别人给我转账了:', payload);
+        console.log("别人给我转账了:", payload);
       });
 
       return () => {
@@ -51,8 +51,8 @@ const TokenTransfer = () => {
   const [transferring, setTransferring] = useState<boolean>(false);
 
   const schema = Yup.object().shape({
-    targetAddress: Yup.string().required('target address is required'),
-    amount: Yup.string().required('amount is required'),
+    targetAddress: Yup.string().required("target address is required"),
+    amount: Yup.string().required("amount is required"),
   });
 
   const methods = useForm<{
@@ -60,14 +60,14 @@ const TokenTransfer = () => {
     amount: string;
   }>({
     resolver: yupResolver(schema),
-    defaultValues: { targetAddress: '', amount: '0' },
+    defaultValues: { targetAddress: "", amount: "0" },
   });
 
   const { watch, setValue, handleSubmit } = methods;
   const values = watch();
 
   async function onSubmit() {
-    console.log('values:', values);
+    console.log("values:", values);
     const { targetAddress, amount } = values;
     if (ethersProvider && erc20SignerContract && tokenInfo) {
       try {
@@ -75,13 +75,13 @@ const TokenTransfer = () => {
         const value = ethers.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
 
         const res = await erc20SignerContract.transfer(targetAddress, value);
-        console.log('交易结果信息:', res);
+        console.log("交易结果信息:", res);
         const receipt = await res.wait();
-        console.log('交易收据信息:', receipt);
+        console.log("交易收据信息:", receipt);
 
         updateMyBalance();
-        setValue('amount', '');
-        toast.success('successfully transferred');
+        setValue("amount", "");
+        toast.success("successfully transferred");
       } catch (error: any) {
         console.log(error);
         toast.error(error.toString());
@@ -91,9 +91,9 @@ const TokenTransfer = () => {
     }
   }
 
-  const [amountInput, setAmountInput] = useState('');
+  const [amountInput, setAmountInput] = useState("");
   const [targetBalanceLoading, setTargetBalanceLoading] = useState(false);
-  const [targetBalance, setTargetBalance] = useState('');
+  const [targetBalance, setTargetBalance] = useState("");
 
   const queryTargetBalance = async (targetAccount: string) => {
     if (erc20ProviderContract && tokenInfo) {
@@ -105,7 +105,7 @@ const TokenTransfer = () => {
         setTargetBalance(tokenBalance);
       } catch (error: any) {
         handleError(error);
-        setTargetBalance('');
+        setTargetBalance("");
       } finally {
         setTargetBalanceLoading(false);
       }
@@ -116,7 +116,7 @@ const TokenTransfer = () => {
     <Card sx={{ p: 3 }}>
       <Typography variant="h4"> Transfer </Typography>
 
-      <Stack flexDirection={'row'} alignItems={'center'} sx={{ mt: 2 }}>
+      <Stack flexDirection={"row"} alignItems={"center"} sx={{ mt: 2 }}>
         <Typography variant="body1">
           Current Balance: {`${balance || 0} MTT`}
         </Typography>
@@ -125,7 +125,7 @@ const TokenTransfer = () => {
         <LoadingButton
           size="small"
           variant="outlined"
-          sx={{ ml: 'auto' }}
+          sx={{ ml: "auto" }}
           onClick={updateMyBalance}
           loading={myBalanceLoading}
         >
@@ -156,7 +156,7 @@ const TokenTransfer = () => {
       </FormProvider>
 
       <Stack spacing={1} sx={{ mt: 3 }}>
-        <Stack flexDirection={'row'} gap={2} alignItems={'center'}>
+        <Stack flexDirection={"row"} gap={2} alignItems={"center"}>
           <TextField
             sx={{ flex: 1 }}
             size="small"
@@ -174,7 +174,7 @@ const TokenTransfer = () => {
               }
             }}
             loading={targetBalanceLoading}
-            sx={{ ml: 'auto' }}
+            sx={{ ml: "auto" }}
           >
             query
           </LoadingButton>

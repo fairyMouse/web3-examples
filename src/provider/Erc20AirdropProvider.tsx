@@ -1,9 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { IErc20AirdropContext } from './types';
-import { useErc20Context } from '@/pages/erc20';
-import { ethers } from 'ethers';
-import MTT_AIRDROP_ABI from 'src/constants/abi/MTT_AIRDROP.abi.json';
-import { AIRDROP_CONTRACT_ADDR } from '@/src/constants/wallet';
+import { createContext, useContext, useEffect, useState } from "react";
+import { IErc20AirdropContext } from "../modules/erc20/types";
+
+import { ethers } from "ethers";
+import MTT_AIRDROP_ABI from "src/constants/abi/MTT_AIRDROP.abi.json";
+import { AIRDROP_CONTRACT_ADDR } from "@/src/constants/wallet";
+import { useWalletContext } from "@/src/provider/WalletProvider";
 
 export const Erc20AirdropContext = createContext<IErc20AirdropContext | null>(
   null
@@ -13,7 +14,7 @@ export const useErc20AirdropContext = () => {
   const context = useContext(Erc20AirdropContext);
   if (!context)
     throw new Error(
-      'useErc20AirdropContext must be use inside Erc20AirdropProvider'
+      "useErc20AirdropContext must be use inside Erc20AirdropProvider"
     );
 
   return context;
@@ -22,7 +23,7 @@ export const useErc20AirdropContext = () => {
 type Props = { children: React.ReactNode };
 
 const Erc20AirdropProvider = ({ children }: Props) => {
-  const { account, ethersProvider } = useErc20Context();
+  const { account, ethersProvider } = useWalletContext();
   const [airdropProviderContract, setAirdropProviderContract] =
     useState<ethers.Contract | null>(null);
   const [airdropSignerContract, setAirdropSignerContract] =

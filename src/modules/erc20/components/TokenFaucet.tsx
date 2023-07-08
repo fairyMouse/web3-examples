@@ -1,4 +1,4 @@
-import { useErc20Context } from "@/pages/erc20";
+import { useErc20Context } from "src/provider/Erc20Provider";
 import { useWalletContext } from "@/src/provider/WalletProvider";
 import handleError from "@/src/utils/handleError";
 import { LoadingButton } from "@mui/lab";

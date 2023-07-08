@@ -1,8 +1,8 @@
-import { Card, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
-import { IMyTokenInfo } from '../types';
-import { ERC20_CONTRACT_ADDR } from 'src/constants/wallet';
-import { useErc20Context } from '@/pages/erc20';
+import { Card, Stack, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { IMyTokenInfo } from "../types";
+import { ERC20_CONTRACT_ADDR } from "src/constants/wallet";
+import { useErc20Context } from "src/provider/Erc20Provider";
 
 const TokenBasicInfo = () => {
   const { tokenInfo } = useErc20Context();
@@ -16,13 +16,13 @@ const TokenBasicInfo = () => {
         </Typography>
 
         <Typography variant="body1">
-          Token Name: {tokenInfo?.name || ''}
+          Token Name: {tokenInfo?.name || ""}
         </Typography>
         <Typography variant="body1">
-          Token Symbol: {tokenInfo?.symbol || ''}
+          Token Symbol: {tokenInfo?.symbol || ""}
         </Typography>
         <Typography variant="body1">
-          Token Decimals: {tokenInfo?.decimals.toString() || ''}
+          Token Decimals: {tokenInfo?.decimals.toString() || ""}
         </Typography>
       </Stack>
     </Card>

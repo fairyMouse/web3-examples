@@ -1,7 +1,7 @@
 import { Card, Stack, Typography } from "@mui/material";
 import AirdropForm from "./AirdropForm";
 import AirdropApproval from "./AirdropApproval";
-import { useErc20Context } from "@/pages/erc20";
+import { useErc20Context } from "src/provider/Erc20Provider";
 import { useEffect, useState } from "react";
 import { AIRDROP_CONTRACT_ADDR } from "@/src/constants/wallet";
 import { ethers } from "ethers";
