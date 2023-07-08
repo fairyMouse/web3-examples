@@ -1,6 +1,4 @@
 import { Card, Stack, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { IMyTokenInfo } from "../types";
 import { ERC20_CONTRACT_ADDR } from "src/constants/wallet";
 import { useErc20Context } from "src/provider/Erc20Provider";
 
