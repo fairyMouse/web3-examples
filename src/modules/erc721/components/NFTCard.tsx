@@ -24,7 +24,7 @@ const NFTCard = (props: INFTCardProps) => {
 
   // 还差自己的ID、等级、父母ID信息展示
   return (
-    <Card sx={{ maxWidth: 280 }}>
+    <Card sx={{ maxWidth: 280, p: 2 }}>
       <CardMedia
         sx={{
           height: 240,
@@ -35,8 +35,7 @@ const NFTCard = (props: INFTCardProps) => {
       />
 
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="small">添加合成</Button>
       </CardActions>
     </Card>
   );

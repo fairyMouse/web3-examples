@@ -5,7 +5,6 @@ export default function Card(theme: Theme) {
     MuiCard: {
       styleOverrides: {
         root: {
-          padding: "16px",
           position: "relative",
           boxShadow: theme.customShadows.card,
           borderRadius: Number(theme.shape.borderRadius) * 2,
