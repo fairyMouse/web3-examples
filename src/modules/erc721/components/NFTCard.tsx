@@ -13,8 +13,14 @@ interface INFTCardProps {
 
 const NFTCard = (props: INFTCardProps) => {
   const { data } = props;
-  const { uri } = data;
-  console.log("data:", data);
+  const { uri, dadId, level, mumId, tokenId } = data;
+  console.log(
+    "dadId:",
+    Number(dadId),
+    Number(level),
+    Number(mumId),
+    Number(tokenId)
+  );
 
   // 还差自己的ID、等级、父母ID信息展示
   return (

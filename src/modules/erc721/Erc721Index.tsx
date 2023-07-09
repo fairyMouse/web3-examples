@@ -60,6 +60,7 @@ const Erc721Index = () => {
         </LoadingButton>
       </Stack>
       <Box
+        gap={2}
         sx={{ mt: 5 }}
         display="grid"
         gridTemplateColumns={{
