@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react';
-
-// const mediaQuery = useMediaQuery('(min-width: 600px)');
+import { useState, useEffect } from "react";
 
 // 这个函数接收一个表示需要匹配设备屏幕尺寸的媒体查询字符串。
 function useMediaQuery(query: string): Boolean {
-  // 检查媒体查询是否与当前设备屏幕大小匹配，并将它存储在 initMatches 常量中。
-
-  // const initMatches = window.matchMedia(query).matches;
+  const initMatches = window.matchMedia(query).matches;
+  console.log("initMatches:", initMatches);
 
   const [matches, setMatches] = useState(false);
 
@@ -14,14 +11,14 @@ function useMediaQuery(query: string): Boolean {
     const mediaQueryList = window.matchMedia(query);
 
     const handleChange = (event: MediaQueryListEvent) => {
-      console.log('handleChange');
-      // setMatches(event.matches);
+      console.log("handleChange:", event.matches);
+      setMatches(event.matches);
     };
 
-    mediaQueryList.addEventListener('change', handleChange);
+    mediaQueryList.addEventListener("change", handleChange);
 
     return () => {
-      mediaQueryList.removeEventListener('change', handleChange);
+      mediaQueryList.removeEventListener("change", handleChange);
     };
   }, [query]);
 
