@@ -21,6 +21,11 @@ const menuConfig = [
     path: "/uniswap_v2",
     icon: <Iconify icon="gala:apple" sx={{ mb: "2px" }} />,
   },
+  {
+    title: "Bridge",
+    path: "/bridge",
+    icon: <Iconify icon="gala:apple" sx={{ mb: "2px" }} />,
+  },
 ];
 
 export default menuConfig;
