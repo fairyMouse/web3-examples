@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { IWalletContext } from "../types/wallet";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
+import { switchToEthereum } from "../utils/ethereum";
 
 export const WalletContext = createContext<IWalletContext | null>(null);
 
@@ -25,6 +26,7 @@ const WalletProvider = ({ children }: Props) => {
       toast.error("please install Metamask");
       return;
     }
+    init();
 
     const handleAccountsChanged = () => {
       const provider = new ethers.BrowserProvider(window.ethereum); // provider为了读
@@ -39,6 +41,10 @@ const WalletProvider = ({ children }: Props) => {
       window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
     };
   }, []);
+
+  const init = async () => {
+    await switchToEthereum();
+  };
 
   return (
     <WalletContext.Provider value={{ account, setAccount, ethersProvider }}>

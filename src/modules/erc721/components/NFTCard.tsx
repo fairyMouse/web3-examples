@@ -35,7 +35,9 @@ const NFTCard = (props: INFTCardProps) => {
       />
 
       <CardActions>
-        <Button size="small">添加合成</Button>
+        <Button size="small" disabled>
+          添加合成（即将上线）
+        </Button>
       </CardActions>
     </Card>
   );
