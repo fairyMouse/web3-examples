@@ -25,10 +25,6 @@ const WalletProvider = ({ children }: Props) => {
       toast.error("please install Metamask");
       return;
     }
-    if (window.ethereum.selectedAddress === null) {
-      toast.warn("MetaMask is not logged in");
-      return;
-    }
 
     const handleAccountsChanged = () => {
       const provider = new ethers.BrowserProvider(window.ethereum); // provider为了读

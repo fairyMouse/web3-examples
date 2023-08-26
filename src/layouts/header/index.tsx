@@ -42,6 +42,7 @@ const Header = () => {
 
   const connectToMetamask = async () => {
     setConnecting(true);
+    console.log("ethersProvider:", ethersProvider);
     if (ethersProvider) {
       try {
         const accounts = await ethersProvider.send("eth_requestAccounts", []);

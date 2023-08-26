@@ -29,11 +29,20 @@ const Test = () => {
       question: prompts,
     };
     setList([...list, item]);
-    append({
-      id,
-      content: prefix + item.question,
-      role: "user",
-    });
+    append(
+      {
+        id,
+        content: prefix + item.question,
+        role: "user",
+      },
+      {
+        options: {
+          body: {
+            api_key: "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",
+          },
+        },
+      }
+    );
     setPrompts("");
   };
 

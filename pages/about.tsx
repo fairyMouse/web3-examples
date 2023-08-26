@@ -1,4 +1,4 @@
-import RouterButton from '@/components/RouterButton'
+import RouterButton from "@/components/RouterButton";
 
 export default function Home() {
   return (
@@ -6,5 +6,5 @@ export default function Home() {
       <h4 className="text-lg font-bold">about 页面</h4>
       <RouterButton />
     </main>
-  )
+  );
 }

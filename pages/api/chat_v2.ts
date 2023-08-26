@@ -1,13 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import OpenAI from "openai";
+import { Configuration, OpenAIApi } from "openai-edge";
 
-export const runtime = "edge";
+export const runtime = "experimental-edge";
 const apiKey = "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";
 
-const openai = new OpenAI({
+const configuration = new Configuration({
   apiKey,
 });
+
+const openai = new OpenAIApi(configuration);
 
 type Data = {
   name: string;
@@ -18,15 +20,18 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   // @ts-ignore
-  const { messages } = await req.json();
+  const reqJson = await req.json();
+  console.log("reqJson:", reqJson);
+  const { messages } = reqJson;
 
-  const response = await openai.chat.completions.create({
+  const result = await openai.createChatCompletion({
     model: "gpt-4",
-    stream: true,
     messages,
-    // messages: [{ role: "user", content: "What is love?" }],
+    temperature: 0.7,
+    stream: true,
   });
-  const stream = OpenAIStream(response);
+
+  const stream = OpenAIStream(result);
 
   return new StreamingTextResponse(stream);
 }

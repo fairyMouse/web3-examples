@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "web3-examples",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -29,7 +29,7 @@
     "lucide-react": "^0.268.0",
     "merkletreejs": "^0.3.10",
     "nanoid": "^4.0.2",
-    "next": "13.0.2",
+    "next": "13.3.1",
     "openai": "^4.0.1",
     "openai-edge": "^1.2.2",
     "react": "18.2.0",
