@@ -1,0 +1,33 @@
+component: http
+name: web-next
+inputs:
+  src:
+    dist: ./
+    hook: yarn build # 部署的时候自动先执行打包
+    exclude:
+      - .env
+      - node_modules
+  faas:
+    runtime: Nodejs14.18
+    framework: nextjs
+    name: "${name}"
+    eip: false
+    timeout: 30
+    memorySize: 512
+    tags: []
+    environments: []
+    layers:
+      - name: web-next-layer
+        version: 7
+  apigw:
+    protocols:
+      - http
+      - https
+    timeout: 60
+    environment: release
+    customDomains: []
+  region: ap-shanghai
+  isAutoCiDeploy: false
+org: "1258537429"
+app: web-next
+stage: dev

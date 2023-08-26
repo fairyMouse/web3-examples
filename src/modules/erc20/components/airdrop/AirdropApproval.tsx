@@ -13,7 +13,7 @@ interface IAirdropApprovalProps {
 
 const AirdropApproval = (props: IAirdropApprovalProps) => {
   const { updateAllowanceForAirdrop, amountInput } = props;
-  const { account, erc20ProviderContract, erc20SignerContract, tokenInfo } =
+  const { erc20ProviderContract, erc20SignerContract, tokenInfo } =
     useErc20Context();
 
   const [approving, setApproving] = useState(false);

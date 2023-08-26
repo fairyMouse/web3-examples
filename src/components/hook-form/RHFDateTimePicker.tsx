@@ -1,9 +1,9 @@
-import { TextField } from '@mui/material';
-import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers';
+import { TextField } from "@mui/material";
+import { DateTimePicker, DateTimePickerProps } from "@mui/x-date-pickers";
 
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from "react-hook-form";
 
-type Props = DateTimePickerProps<any, any> & {
+type Props = DateTimePickerProps<any> & {
   name: string;
 };
 

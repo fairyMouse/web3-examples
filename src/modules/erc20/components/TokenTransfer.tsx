@@ -10,17 +10,17 @@ import { RHFTextField } from "@/src/components/hook-form";
 import { useErc20Context } from "src/provider/Erc20Provider";
 import FormProvider from "@/src/components/hook-form/FormProvider";
 import handleError from "@/src/utils/handleError";
+import { useWalletContext } from "@/src/provider/WalletProvider";
 
 const TokenTransfer = () => {
+  const { ethersProvider, account } = useWalletContext();
   const {
-    account,
     tokenInfo,
     erc20ProviderContract,
     balance,
     myBalanceLoading,
     updateMyBalance,
     erc20SignerContract,
-    ethersProvider,
   } = useErc20Context();
 
   useEffect(() => {
