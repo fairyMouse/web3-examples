@@ -5,23 +5,26 @@ import TokenBasicInfo from "./components/TokenBasicInfo";
 import TokenFaucet from "./components/TokenFaucet";
 import TokenAirdrop from "./components/airdrop/AirdropIndex";
 import { useWalletContext } from "@/src/provider/WalletProvider";
+import { useAccount } from "wagmi";
 
 const Erc20Index = () => {
   const { account } = useWalletContext();
+  const { address } = useAccount();
+  console.log("address:", address);
   return (
     <Container>
+      <TokenBasicInfo />
       <Box
         gap={3}
-        sx={{ mt: 5 }}
+        sx={{ mt: 3 }}
         display="grid"
         gridTemplateColumns={{
           sm: "repeat(1, 1fr)",
           lg: "repeat(2, 1fr)",
         }}
       >
-        <TokenBasicInfo />
-        {account && <TokenTransfer />}
         {account && <TokenFaucet />}
+        {account && <TokenTransfer />}
         {account && <TokenAirdrop />}
       </Box>
     </Container>

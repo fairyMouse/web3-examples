@@ -17,6 +17,7 @@
     "paths": {
       "@/*": ["./*"],
       "src/*": ["./src/*"],
+      "public/*": ["./public/*"],
       "@icons/*": ["./public/icons/*"]
     }
   },
