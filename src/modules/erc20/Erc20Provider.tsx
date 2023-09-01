@@ -5,10 +5,12 @@ import {
   useAccount,
   useContractRead,
   useContractReads,
+  useNetwork,
   usePrepareContractWrite,
 } from "wagmi";
 import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
 import MTT_ERC20_ABI from "src/constants/abi/MTT_ERC20.abi.json";
+import { l1Networks } from "@/src/constants/network";
 
 export const Erc20Context = createContext<IErc20Context | null>(null);
 
@@ -24,6 +26,7 @@ type Props = { children: React.ReactNode };
 
 const Erc20Provider = ({ children }: Props) => {
   const { address } = useAccount();
+
   const ERC20ContractParams: IContractParams = {
     address: ERC20_CONTRACT_ADDR,
     abi: MTT_ERC20_ABI,

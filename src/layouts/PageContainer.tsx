@@ -1,5 +1,6 @@
-import { Stack } from "@mui/material";
-import { useNetwork } from "wagmi";
+import { Button, Stack } from "@mui/material";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { l1Networks } from "../constants/network";
 
 interface IPageContainerProps {
   children: React.ReactNode;
@@ -7,10 +8,29 @@ interface IPageContainerProps {
 
 const PageContainer = (props: IPageContainerProps) => {
   const { children } = props;
-  const res = useNetwork();
-  console.log("res:", res);
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
-  return <Stack>{children}</Stack>;
+  const isCorrectNetwork = chain?.id === l1Networks.goerli.id;
+
+  return (
+    <Stack sx={{ mt: 3 }}>
+      {isCorrectNetwork ? (
+        children
+      ) : (
+        <Stack alignItems={"center"}>
+          <Button
+            disabled={!address}
+            sx={{ width: "50%" }}
+            onClick={() => switchNetwork && switchNetwork(l1Networks.goerli.id)}
+          >
+            Change wallet network to {l1Networks.goerli.name}
+          </Button>
+        </Stack>
+      )}
+    </Stack>
+  );
 };
 
 export default PageContainer;

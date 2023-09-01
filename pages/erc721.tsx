@@ -1,7 +1,12 @@
+import PageContainer from "@/src/layouts/PageContainer";
 import Erc721Index from "@/src/modules/erc721/Erc721Index";
 
 const Erc721 = () => {
-  return <Erc721Index />;
+  return (
+    <PageContainer>
+      <Erc721Index />
+    </PageContainer>
+  );
 };
 
 export default Erc721;
