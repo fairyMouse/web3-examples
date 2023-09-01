@@ -10,10 +10,10 @@ import {
   Typography,
   capitalize,
 } from "@mui/material";
-import { Network } from "ethers";
 import { useEffect, useState } from "react";
 import Iconify from "@/src/components/iconify/Iconify";
 import { toast } from "react-toastify";
+import { Network } from "zksync/build/types";
 
 const Header = () => {
   const { ethersProvider, account, setAccount } = useWalletContext();
