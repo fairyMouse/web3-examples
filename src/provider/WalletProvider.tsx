@@ -18,7 +18,7 @@ type Props = { children: React.ReactNode };
 
 const WalletProvider = ({ children }: Props) => {
   const [ethersProvider, setEthersProvider] =
-    useState<ethers.BrowserProvider | null>(null);
+    useState<ethers.providers.Web3Provider | null>(null);
   const [account, setAccount] = useState("");
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const WalletProvider = ({ children }: Props) => {
     }
 
     const handleAccountsChanged = () => {
-      const provider = new ethers.BrowserProvider(window.ethereum); // provider为了读
+      const provider = new ethers.providers.Web3Provider(window.ethereum); // provider为了读
       setEthersProvider(provider);
     };
     handleAccountsChanged();
