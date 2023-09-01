@@ -1,5 +1,5 @@
 import { HEADER, NAV } from "@/src/constants/layouts";
-
+import { useWalletContext } from "@/src/provider/WalletProvider";
 import { LoadingButton } from "@mui/lab";
 import EthereumSvg from "@icons/blockchain/ethereum.svg";
 import {
@@ -10,30 +10,56 @@ import {
   Typography,
   capitalize,
 } from "@mui/material";
-import MetamaskSvg from "public/icons/common/metamask.svg";
+import { Network } from "ethers";
 import { useEffect, useState } from "react";
 import Iconify from "@/src/components/iconify/Iconify";
 import { toast } from "react-toastify";
-import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi";
-import { InjectedConnector } from "@wagmi/core";
-import { shortenAddress } from "@/src/utils/formatters";
 
 const Header = () => {
-  const { address, isConnecting } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { connect, isLoading } = useConnect({
-    connector: new InjectedConnector(),
-  });
-  const { chain } = useNetwork();
+  const { ethersProvider, account, setAccount } = useWalletContext();
+
   const disconnectText = "disconnect";
   const [buttonText, setButtonText] = useState("");
+  const [connecting, setConnecting] = useState(false);
+
+  const [network, setNetwork] = useState<Network | null>(null);
+  console.log("network:", network);
 
   useEffect(() => {
-    setButtonText(address || "");
-  }, [address]);
+    if (ethersProvider) {
+      ethersProvider.getNetwork().then(res => {
+        setNetwork(res);
+      });
+    }
+  }, [ethersProvider]);
+
+  useEffect(() => {
+    setButtonText(account);
+  }, [account]);
+
+  useEffect(() => {
+    connectToMetamask();
+  }, [ethersProvider]);
+
+  const connectToMetamask = async () => {
+    setConnecting(true);
+    console.log("ethersProvider:", ethersProvider);
+    if (ethersProvider) {
+      try {
+        const accounts = await ethersProvider.send("eth_requestAccounts", []);
+
+        setAccount(accounts[0]);
+      } catch (error) {
+        console.log(error);
+        toast.error("failed to connect to metamask");
+      }
+    }
+
+    setConnecting(false);
+  };
 
   const walletDisconnect = () => {
-    disconnect();
+    setAccount("");
   };
   return (
     <AppBar
@@ -52,35 +78,34 @@ const Header = () => {
         gap={2}
       >
         <Box sx={{ flexGrow: 1 }}></Box>
-        {chain && (
+        {network && (
           <Button
             variant="outlined"
             startIcon={<EthereumSvg />}
             endIcon={<Iconify icon="eva:chevron-down-fill" />}
           >
-            {capitalize(chain.name)}
+            {capitalize(network.name)}
           </Button>
         )}
         <Stack sx={{ width: 200 }}>
-          {address ? (
+          {account ? (
             <Button
               variant="outlined"
-              startIcon={<MetamaskSvg width={20} height={20} />}
               onClick={walletDisconnect}
               onMouseEnter={() => setButtonText(disconnectText)}
-              onMouseLeave={() => setButtonText(address)}
+              onMouseLeave={() => setButtonText(account)}
             >
               {buttonText === disconnectText
                 ? disconnectText
-                : `${shortenAddress(buttonText)}`}
+                : `${buttonText.slice(0, 6)}...${buttonText.slice(-4)}`}
             </Button>
           ) : (
             <LoadingButton
               variant="contained"
-              loading={isConnecting}
-              onClick={() => connect()}
+              loading={connecting}
+              onClick={connectToMetamask}
             >
-              Connect to Wallet
+              connect metamask
             </LoadingButton>
           )}
         </Stack>

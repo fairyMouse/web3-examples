@@ -1,33 +1,49 @@
-import { Box, Button, Container } from "@mui/material";
+import { Alert, Box, Button, Card, Container, Typography } from "@mui/material";
 
 import TokenTransfer from "./components/TokenTransfer";
 import TokenBasicInfo from "./components/TokenBasicInfo";
 import TokenFaucet from "./components/TokenFaucet";
 import TokenAirdrop from "./components/airdrop/AirdropIndex";
-import { useWalletContext } from "@/src/provider/WalletProvider";
+import Erc20Provider from "./Erc20Provider";
 import { useAccount } from "wagmi";
 
-const Erc20Index = () => {
-  const { account } = useWalletContext();
+const Erc20Main = () => {
   const { address } = useAccount();
-  console.log("address:", address);
   return (
     <Container>
       <TokenBasicInfo />
-      <Box
-        gap={3}
-        sx={{ mt: 3 }}
-        display="grid"
-        gridTemplateColumns={{
-          sm: "repeat(1, 1fr)",
-          lg: "repeat(2, 1fr)",
-        }}
-      >
-        {account && <TokenFaucet />}
-        {account && <TokenTransfer />}
-        {account && <TokenAirdrop />}
-      </Box>
+      {address ? (
+        <Box
+          gap={3}
+          sx={{ mt: 3 }}
+          display="grid"
+          gridTemplateColumns={{
+            sm: "repeat(1, 1fr)",
+            lg: "repeat(2, 1fr)",
+          }}
+        >
+          <TokenTransfer />
+          <TokenAirdrop />
+        </Box>
+      ) : (
+        <Typography
+          variant="body1"
+          paragraph
+          color={"text.secondary"}
+          sx={{ mt: 3 }}
+        >
+          Link wallet to discover more...
+        </Typography>
+      )}
     </Container>
+  );
+};
+
+const Erc20Index = () => {
+  return (
+    <Erc20Provider>
+      <Erc20Main />
+    </Erc20Provider>
   );
 };
 

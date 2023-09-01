@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { IErc20AirdropContext } from "../modules/erc20/types";
+import { IErc20AirdropContext } from "../modules/erc20/types_ethers";
 
 import { ethers } from "ethers";
 import MTT_AIRDROP_ABI from "src/constants/abi/MTT_AIRDROP.abi.json";

@@ -1,7 +1,7 @@
 import { formatUnits, type BigNumberish, parseUnits, getAddress } from "ethers";
 
 export function shortenAddress(address: string, chars = 3): string {
-  return `${address.slice(0, chars + 3)}...${address.slice(-3)}`;
+  return `${address.slice(0, chars + 3)}...${address.slice(-4)}`;
 }
 
 export function parseTokenAmount(

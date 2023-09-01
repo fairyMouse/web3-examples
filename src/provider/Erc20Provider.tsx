@@ -6,7 +6,7 @@ import {
   ERC20_CONTRACT_ADDR,
   FAUCET_CONTRACT_ADDR,
 } from "src/constants/wallet";
-import { IErc20Context, IMyTokenInfo } from "@/src/modules/erc20/types";
+import { IErc20Context, IMyTokenInfo } from "@/src/modules/erc20/types_ethers";
 import { useWalletContext } from "@/src/provider/WalletProvider";
 
 export const Erc20Context = createContext<IErc20Context | null>(null);

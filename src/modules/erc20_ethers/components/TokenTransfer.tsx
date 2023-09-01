@@ -116,6 +116,23 @@ const TokenTransfer = () => {
     <Card sx={{ p: 3 }}>
       <Typography variant="h4"> Transfer </Typography>
 
+      <Stack flexDirection={"row"} alignItems={"center"} sx={{ mt: 2 }}>
+        <Typography variant="body1">
+          Current Balance: {`${balance || 0} MTT`}
+        </Typography>
+
+        {/* 这里可以做成监听我给别人转账、别人给我转账来自动更新，但我感觉还是有个手动刷新比较放心 */}
+        <LoadingButton
+          size="small"
+          variant="outlined"
+          sx={{ ml: "auto" }}
+          onClick={updateMyBalance}
+          loading={myBalanceLoading}
+        >
+          refresh
+        </LoadingButton>
+      </Stack>
+
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} sx={{ mt: 2 }}>
           <RHFTextField
