@@ -27,7 +27,7 @@ const Header = () => {
 
   useEffect(() => {
     if (ethersProvider) {
-      ethersProvider.getNetwork().then(res => {
+      ethersProvider.getNetwork().then((res: any) => {
         setNetwork(res);
       });
     }
