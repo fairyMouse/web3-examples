@@ -1,6 +1,12 @@
 import { createContext, useContext, useState } from "react";
-import { IErc20Context } from "./types";
-import { Address, useAccount, useContractRead, useContractReads } from "wagmi";
+import { IContractParams, IErc20Context } from "./types";
+import {
+  Address,
+  useAccount,
+  useContractRead,
+  useContractReads,
+  usePrepareContractWrite,
+} from "wagmi";
 import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
 import MTT_ERC20_ABI from "src/constants/abi/MTT_ERC20.abi.json";
 import { formatUnits } from "ethers";
@@ -19,25 +25,22 @@ type Props = { children: React.ReactNode };
 
 const Erc20Provider = ({ children }: Props) => {
   const { address } = useAccount();
-  const ERC20Contract: {
-    address: Address;
-    abi: any;
-  } = {
+  const ERC20ContractParams: IContractParams = {
     address: ERC20_CONTRACT_ADDR,
     abi: MTT_ERC20_ABI,
   };
   const { data, isError, isLoading } = useContractReads({
     contracts: [
       {
-        ...ERC20Contract,
+        ...ERC20ContractParams,
         functionName: "name",
       },
       {
-        ...ERC20Contract,
+        ...ERC20ContractParams,
         functionName: "symbol",
       },
       {
-        ...ERC20Contract,
+        ...ERC20ContractParams,
         functionName: "decimals",
       },
     ],
@@ -50,21 +53,27 @@ const Erc20Provider = ({ children }: Props) => {
       }
     : null;
 
-  const { data: balanceData } = useContractRead({
-    address: ERC20_CONTRACT_ADDR,
-    abi: MTT_ERC20_ABI,
+  const balanceRes = useContractRead({
+    ...ERC20ContractParams,
     functionName: "balanceOf",
     args: [address || "0x"],
     enabled: !!address,
   }) as any;
 
-  const balance =
-    balanceData && tokenInfo
-      ? formatUnits(balanceData.toString(), tokenInfo?.decimals)
-      : "";
+  // const { config } = usePrepareContractWrite({
+  //   ...ERC20ContractParams,
+  //   functionName: "transfer",
+  // });
 
   return (
-    <Erc20Context.Provider value={{ tokenInfo, balance }}>
+    <Erc20Context.Provider
+      value={{
+        ERC20ContractParams,
+        tokenInfo,
+        balanceRes,
+        // transferConfig: config
+      }}
+    >
       {children}
     </Erc20Context.Provider>
   );

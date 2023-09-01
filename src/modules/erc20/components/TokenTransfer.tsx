@@ -1,120 +1,75 @@
-import * as Yup from "yup";
 import { Card, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { ethers, isAddress } from "ethers";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { RHFTextField } from "@/src/components/hook-form";
-import { useErc20Context } from "src/provider/Erc20Provider";
 import FormProvider from "@/src/components/hook-form/FormProvider";
-import handleError from "@/src/utils/handleError";
-import { useWalletContext } from "@/src/provider/WalletProvider";
+import { useErc20Context } from "../Erc20Provider";
+import {
+  useContractRead,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
+import MTT_ERC20_ABI from "src/constants/abi/MTT_ERC20.abi.json";
+import { tokenTransferSchema } from "@/src/constants/schema";
 
 const TokenTransfer = () => {
-  const { ethersProvider, account } = useWalletContext();
-  const {
-    tokenInfo,
-    erc20ProviderContract,
-    balance,
-    myBalanceLoading,
-    updateMyBalance,
-    erc20SignerContract,
-  } = useErc20Context();
-
-  useEffect(() => {
-    updateMyBalance();
-  }, [account, tokenInfo, erc20ProviderContract]);
-
-  useEffect(() => {
-    if (erc20ProviderContract) {
-      const fromMe = erc20ProviderContract.filters.Transfer(account, null);
-      const toMe = erc20ProviderContract.filters.Transfer(null, account);
-
-      // 监听我给别人转账事件
-      erc20ProviderContract.on(fromMe, payload => {
-        console.log("我给别人转账了:", payload);
-      });
-      // 监听别人给我转账事件
-      erc20ProviderContract.on(toMe, payload => {
-        console.log("别人给我转账了:", payload);
-      });
-
-      return () => {
-        erc20ProviderContract.removeAllListeners(fromMe);
-        erc20ProviderContract.removeAllListeners(toMe);
-      };
-    }
-  }, [account, erc20ProviderContract]);
-
-  const [transferring, setTransferring] = useState<boolean>(false);
-
-  const schema = Yup.object().shape({
-    targetAddress: Yup.string().required("target address is required"),
-    amount: Yup.string().required("amount is required"),
-  });
-
+  const { tokenInfo, ERC20ContractParams } = useErc20Context();
   const methods = useForm<{
     targetAddress: string;
     amount: string;
   }>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(tokenTransferSchema),
     defaultValues: { targetAddress: "", amount: "0" },
   });
 
   const { watch, setValue, handleSubmit } = methods;
   const values = watch();
+  const { targetAddress, amount } = values;
+
+  const { data, isLoading, write } = useContractWrite({
+    address: ERC20_CONTRACT_ADDR,
+    abi: MTT_ERC20_ABI,
+    functionName: "transfer",
+  });
+
+  const { isSuccess, isLoading: isTxLoading } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  const [queryAddress, setQueryAddress] = useState("");
+  const { data: queryBalance } = useContractRead({
+    ...ERC20ContractParams,
+    functionName: "balanceOf",
+    args: [queryAddress],
+    enabled: isAddress(queryAddress),
+  }) as any;
+
+  const queryBalanceFormatted = queryBalance
+    ? ethers.formatUnits(queryBalance, tokenInfo?.decimals)
+    : 0;
 
   async function onSubmit() {
-    console.log("values:", values);
-    const { targetAddress, amount } = values;
-    if (ethersProvider && erc20SignerContract && tokenInfo) {
-      try {
-        setTransferring(true);
-        const value = ethers.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
-
-        const res = await erc20SignerContract.transfer(targetAddress, value);
-        console.log("交易结果信息:", res);
-        const receipt = await res.wait();
-        console.log("交易收据信息:", receipt);
-
-        updateMyBalance();
-        setValue("amount", "");
-        toast.success("successfully transferred");
-      } catch (error: any) {
-        console.log(error);
-        toast.error(error.toString());
-      } finally {
-        setTransferring(false);
-      }
-    }
+    write &&
+      write({
+        args: [targetAddress, ethers.parseUnits(amount, tokenInfo?.decimals)],
+      });
   }
 
-  const [amountInput, setAmountInput] = useState("");
-  const [targetBalanceLoading, setTargetBalanceLoading] = useState(false);
-  const [targetBalance, setTargetBalance] = useState("");
-
-  const queryTargetBalance = async (targetAccount: string) => {
-    if (erc20ProviderContract && tokenInfo) {
-      try {
-        setTargetBalanceLoading(true);
-        const res = await erc20ProviderContract.balanceOf(targetAccount);
-
-        const tokenBalance = ethers.formatUnits(res, tokenInfo.decimals);
-        setTargetBalance(tokenBalance);
-      } catch (error: any) {
-        handleError(error);
-        setTargetBalance("");
-      } finally {
-        setTargetBalanceLoading(false);
-      }
+  useEffect(() => {
+    if (isSuccess) {
+      setValue("amount", "");
+      toast.success("successfully transferred");
     }
-  };
+  }, [isSuccess]);
 
   return (
     <Card sx={{ p: 3 }}>
-      <Typography variant="h4"> Transfer </Typography>
+      <Typography variant="h5"> Transfer </Typography>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} sx={{ mt: 2 }}>
@@ -129,7 +84,7 @@ const TokenTransfer = () => {
             name="amount"
           ></RHFTextField>
           <LoadingButton
-            loading={transferring}
+            loading={isLoading || isTxLoading}
             variant="contained"
             type="submit"
           >
@@ -138,31 +93,20 @@ const TokenTransfer = () => {
         </Stack>
       </FormProvider>
 
-      <Stack spacing={1} sx={{ mt: 3 }}>
+      <Stack spacing={2} sx={{ mt: 5 }}>
+        <Typography variant="h5"> Query Balance </Typography>
         <Stack flexDirection={"row"} gap={2} alignItems={"center"}>
           <TextField
             sx={{ flex: 1 }}
             size="small"
-            label="Enter target address"
-            placeholder="Query the balance of the specified address"
-            value={amountInput}
+            label="Target address "
+            value={queryAddress}
             onChange={e => {
-              setAmountInput(e.target.value);
+              setQueryAddress(e.target.value);
             }}
           />
-          <LoadingButton
-            onClick={() => {
-              if (amountInput) {
-                queryTargetBalance(amountInput);
-              }
-            }}
-            loading={targetBalanceLoading}
-            sx={{ ml: "auto" }}
-          >
-            query
-          </LoadingButton>
         </Stack>
-        <Typography variant="body1">{`${targetBalance || 0} MTT`}</Typography>
+        <Typography variant="body1">{`${queryBalanceFormatted} MTT`}</Typography>
       </Stack>
     </Card>
   );

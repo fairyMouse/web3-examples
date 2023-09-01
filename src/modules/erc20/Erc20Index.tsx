@@ -2,7 +2,6 @@ import { Alert, Box, Button, Card, Container, Typography } from "@mui/material";
 
 import TokenTransfer from "./components/TokenTransfer";
 import TokenBasicInfo from "./components/TokenBasicInfo";
-import TokenFaucet from "./components/TokenFaucet";
 import TokenAirdrop from "./components/airdrop/AirdropIndex";
 import Erc20Provider from "./Erc20Provider";
 import { useAccount } from "wagmi";
@@ -14,16 +13,16 @@ const Erc20Main = () => {
       <TokenBasicInfo />
       {address ? (
         <Box
-          gap={3}
+          // gap={3}
           sx={{ mt: 3 }}
-          display="grid"
-          gridTemplateColumns={{
-            sm: "repeat(1, 1fr)",
-            lg: "repeat(2, 1fr)",
-          }}
+          // display="grid"
+          // gridTemplateColumns={{
+          //   sm: "repeat(1, 1fr)",
+          //   lg: "repeat(2, 1fr)",
+          // }}
         >
           <TokenTransfer />
-          <TokenAirdrop />
+          {/* <TokenAirdrop /> */}
         </Box>
       ) : (
         <Typography

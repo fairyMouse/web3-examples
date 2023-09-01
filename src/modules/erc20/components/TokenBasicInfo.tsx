@@ -22,17 +22,21 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import MTT_ERC20_ABI from "src/constants/abi/MTT_ERC20.abi.json";
 import MTT_FAUCET_ABI from "src/constants/abi/MTT_FAUCET.abi.json";
 
 import { useErc20Context } from "../Erc20Provider";
 import { LoadingButton } from "@mui/lab";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { formatUnits } from "ethers";
 
 const TokenBasicInfo = () => {
-  const { tokenInfo, balance } = useErc20Context();
+  const { tokenInfo, balanceRes } = useErc20Context();
   const { address } = useAccount();
 
+  const balance =
+    balanceRes.data && tokenInfo
+      ? formatUnits(balanceRes.data.toString(), tokenInfo?.decimals)
+      : "";
   const { data: isFaucetRequested } = useContractRead({
     address: FAUCET_CONTRACT_ADDR,
     abi: MTT_FAUCET_ABI,
@@ -40,29 +44,28 @@ const TokenBasicInfo = () => {
     args: [address || "0x"],
     enabled: !!address,
   }) as any;
-  console.log("isFaucetRequested:", isFaucetRequested);
 
   const { config } = usePrepareContractWrite({
     address: FAUCET_CONTRACT_ADDR,
     abi: MTT_FAUCET_ABI,
     functionName: "requestTokens",
   });
-  // 得写新的Provider了
 
-  const { data, error, isError, write } = useContractWrite(config);
+  const { data, error, isError, isLoading, write } = useContractWrite(config);
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const { isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
 
-  console.log(isLoading, data);
+  useEffect(() => {
+    isSuccess && balanceRes.refetch();
+  }, [isSuccess, balanceRes]);
 
   const faucetButtonText = useMemo(() => {
-    if (!address) {
-      return `Please connect wallet first`;
-    }
-    return isFaucetRequested ? "Already Received" : "Receive";
-  }, [address, isFaucetRequested]);
+    if (!address) return `Please connect wallet first`;
+    if (isSuccess || isFaucetRequested) return "Already Received";
+    return "Receive";
+  }, [address, isFaucetRequested, isSuccess]);
 
   return (
     <Card sx={{ p: 3, mt: 3 }}>
@@ -118,7 +121,7 @@ const TokenBasicInfo = () => {
             <LoadingButton
               loading={isLoading}
               onClick={write}
-              disabled={isFaucetRequested || !address}
+              disabled={isFaucetRequested || !address || isSuccess}
             >
               {faucetButtonText}
             </LoadingButton>
