@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import Iconify from "@/src/components/iconify/Iconify";
 import { toast } from "react-toastify";
-import { Network } from "zksync/build/types";
+import { Network } from "hardhat/types";
 
 const Header = () => {
   const { ethersProvider, account, setAccount } = useWalletContext();
