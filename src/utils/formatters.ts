@@ -1,4 +1,5 @@
-import { formatUnits, type BigNumberish, parseUnits, getAddress } from "ethers";
+import { type BigNumberish } from "ethers";
+import { formatUnits, getAddress, parseUnits } from "ethers/lib/utils";
 
 export function shortenAddress(address: string, chars = 3): string {
   return `${address.slice(0, chars + 3)}...${address.slice(-4)}`;
@@ -8,7 +9,7 @@ export function parseTokenAmount(
   amount: BigNumberish,
   decimals: number
 ): string {
-  const result = formatUnits(amount.toString(), decimals).toString();
+  const result = formatUnits(amount, decimals).toString();
   if (result.endsWith(".0")) {
     return result.slice(0, -2);
   }

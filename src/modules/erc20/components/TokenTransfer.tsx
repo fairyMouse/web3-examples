@@ -1,6 +1,5 @@
 import { Card, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { ethers, isAddress } from "ethers";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +15,7 @@ import {
 import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
 import MTT_ERC20_ABI from "src/constants/abi/MTT_ERC20.abi.json";
 import { tokenTransferSchema } from "@/src/constants/schema";
+import { formatUnits, isAddress, parseUnits } from "ethers/lib/utils";
 
 const TokenTransfer = () => {
   const { tokenInfo, ERC20ContractParams } = useErc20Context();
@@ -50,13 +50,13 @@ const TokenTransfer = () => {
   }) as any;
 
   const queryBalanceFormatted = queryBalance
-    ? ethers.formatUnits(queryBalance, tokenInfo?.decimals)
+    ? formatUnits(queryBalance, tokenInfo?.decimals)
     : 0;
 
   async function onSubmit() {
     write &&
       write({
-        args: [targetAddress, ethers.parseUnits(amount, tokenInfo?.decimals)],
+        args: [targetAddress, parseUnits(amount, tokenInfo?.decimals)],
       });
   }
 

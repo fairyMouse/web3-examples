@@ -11,6 +11,7 @@ import { useErc20Context } from "src/provider/Erc20Provider";
 import FormProvider from "@/src/components/hook-form/FormProvider";
 import handleError from "@/src/utils/handleError";
 import { useWalletContext } from "@/src/provider/WalletProvider";
+import { parseUnits } from "ethers/lib/utils";
 
 const TokenTransfer = () => {
   const { ethersProvider, account } = useWalletContext();
@@ -72,7 +73,7 @@ const TokenTransfer = () => {
     if (ethersProvider && erc20SignerContract && tokenInfo) {
       try {
         setTransferring(true);
-        const value = ethers.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
+        const value = parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
 
         const res = await erc20SignerContract.transfer(targetAddress, value);
         console.log("交易结果信息:", res);
@@ -101,7 +102,7 @@ const TokenTransfer = () => {
         setTargetBalanceLoading(true);
         const res = await erc20ProviderContract.balanceOf(targetAccount);
 
-        const tokenBalance = ethers.formatUnits(res, tokenInfo.decimals);
+        const tokenBalance = formatUnits(res, tokenInfo.decimals);
         setTargetBalance(tokenBalance);
       } catch (error: any) {
         handleError(error);

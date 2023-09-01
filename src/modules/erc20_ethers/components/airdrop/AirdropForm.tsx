@@ -12,6 +12,7 @@ import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
 import { toast } from "react-toastify";
 import { useErc20Context } from "src/provider/Erc20Provider";
 import { ethers } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
 
 interface IAirdropFormProps {
   updateAllowanceForAirdrop: () => Promise<void>;
@@ -47,7 +48,7 @@ const AirdropForm = (props: IAirdropFormProps) => {
     }
 
     const addressArr = addresses.split(",");
-    const value = ethers.parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
+    const value = parseUnits(amount, tokenInfo.decimals); // 精度需要自己指定的
     const amountArr = addressArr.map(item => value);
 
     if (airdropSignerContract) {

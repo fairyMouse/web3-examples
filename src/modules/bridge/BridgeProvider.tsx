@@ -74,7 +74,9 @@ const BridgeProvider = ({ children }: Props) => {
       getWalletClient(l1ChainId ? { chainId: l1ChainId } : undefined).then(
         (client: any) => {
           if (client) {
-            const web3Provider = new ethers.BrowserProvider(client);
+            const web3Provider = new ethers.providers.Web3Provider(
+              client as any
+            );
 
             const eraL1Signer = L1Signer.from(
               web3Provider.getSigner(),

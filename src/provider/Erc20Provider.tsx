@@ -8,6 +8,7 @@ import {
 } from "src/constants/wallet";
 import { IErc20Context, IMyTokenInfo } from "@/src/modules/erc20/types_ethers";
 import { useWalletContext } from "@/src/provider/WalletProvider";
+import { formatUnits } from "ethers/lib/utils";
 
 export const Erc20Context = createContext<IErc20Context | null>(null);
 
@@ -107,7 +108,7 @@ const Erc20Provider = (props: IErc20Provider) => {
     if (erc20ProviderContract && tokenInfo) {
       const res = await erc20ProviderContract.balanceOf(account);
 
-      const tokenBalance = ethers.formatUnits(res, tokenInfo.decimals);
+      const tokenBalance = formatUnits(res, tokenInfo.decimals);
       setBalance(tokenBalance);
     }
     setMyBalanceLoading(false);

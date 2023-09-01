@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AIRDROP_CONTRACT_ADDR } from "@/src/constants/wallet";
 import { ethers } from "ethers";
 import { useWalletContext } from "@/src/provider/WalletProvider";
+import { formatUnits } from "ethers/lib/utils";
 
 const AirdropIndex = () => {
   const { account } = useWalletContext();
@@ -26,7 +27,7 @@ const AirdropIndex = () => {
       );
 
       if (tokenInfo) {
-        setAmountInput(ethers.formatUnits(res, tokenInfo.decimals));
+        setAmountInput(formatUnits(res, tokenInfo.decimals));
       }
     }
   };

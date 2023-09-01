@@ -9,9 +9,9 @@ import { L2VoidSigner, Signer, Web3Provider } from "zksync-web3";
 
 import { IZksyncEraProviderContext } from "./types";
 import { useBridgeProviderContext } from "./BridgeProvider";
-import { formatUnits } from "ethers";
 import { calculateFee } from "@/src/utils/helpers";
 import { useEraProviderStore } from "./hooks/useEraProviderStore";
+import { formatUnits } from "ethers/lib/utils";
 
 export const ZksyncEraProviderContext =
   createContext<IZksyncEraProviderContext | null>(null);

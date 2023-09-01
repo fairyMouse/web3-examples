@@ -28,7 +28,7 @@ import MTT_FAUCET_ABI from "src/constants/abi/MTT_FAUCET.abi.json";
 import { useErc20Context } from "../Erc20Provider";
 import { LoadingButton } from "@mui/lab";
 import { useEffect, useMemo } from "react";
-import { formatUnits } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 
 const TokenBasicInfo = () => {
   const { tokenInfo, balanceRes } = useErc20Context();

@@ -9,7 +9,6 @@ import {
 } from "wagmi";
 import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
 import MTT_ERC20_ABI from "src/constants/abi/MTT_ERC20.abi.json";
-import { formatUnits } from "ethers";
 
 export const Erc20Context = createContext<IErc20Context | null>(null);
 
