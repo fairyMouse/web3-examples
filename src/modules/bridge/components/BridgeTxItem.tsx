@@ -3,8 +3,8 @@ import { Stack, Typography, useTheme } from "@mui/material";
 import dayjs from "dayjs";
 import { ArrowRight, Copy, CornerRightUp, Divide } from "lucide-react";
 
-import { formatEther } from "ethers";
 import { useEraProviderStore } from "../hooks/useEraProviderStore";
+import { formatEther } from "ethers/lib/utils";
 
 const BridgeTxItem = (props: { data: any }) => {
   const {

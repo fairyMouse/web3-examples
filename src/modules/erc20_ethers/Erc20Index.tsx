@@ -6,12 +6,9 @@ import TokenFaucet from "./components/TokenFaucet";
 import TokenAirdrop from "./components/airdrop/AirdropIndex";
 
 import { useAccount } from "wagmi";
-import { useWalletContext } from "@/src/provider/WalletProvider";
 
 const Erc20Index = () => {
-  const { account } = useWalletContext();
-  // const { address } = useAccount();
-  // console.log("address:", address);
+  const { address } = useAccount();
   return (
     <Container>
       <TokenBasicInfo />
@@ -24,9 +21,9 @@ const Erc20Index = () => {
           lg: "repeat(2, 1fr)",
         }}
       >
-        {account && <TokenFaucet />}
-        {account && <TokenTransfer />}
-        {account && <TokenAirdrop />}
+        {address && <TokenFaucet />}
+        {address && <TokenTransfer />}
+        {address && <TokenAirdrop />}
       </Box>
     </Container>
   );

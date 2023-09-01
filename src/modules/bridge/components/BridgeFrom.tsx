@@ -11,11 +11,11 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { useAccount } from "wagmi";
-import { formatEther } from "ethers";
 import { RHFTextField } from "@/src/components/hook-form";
 import MenuPopover from "@/src/components/menu-popover/MenuPopover";
 import { useBridgeProviderContext } from "../BridgeProvider";
 import { useZksyncEraProviderContext } from "../ZksyncEraProvider";
+import { formatEther } from "ethers/lib/utils";
 
 const BridgeFrom = () => {
   const { methods, maxFee, isDeposit, tokens, tokenFrom, setTokenFrom } =

@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { Card, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { ethers } from "ethers";
+
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,7 +11,7 @@ import { useErc20Context } from "src/provider/Erc20Provider";
 import FormProvider from "@/src/components/hook-form/FormProvider";
 import handleError from "@/src/utils/handleError";
 import { useWalletContext } from "@/src/provider/WalletProvider";
-import { parseUnits } from "ethers/lib/utils";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 
 const TokenTransfer = () => {
   const { ethersProvider, account } = useWalletContext();

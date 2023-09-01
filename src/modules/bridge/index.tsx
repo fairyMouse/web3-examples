@@ -3,7 +3,7 @@ import { BridgeTabEnum } from "./types";
 import { useState } from "react";
 import BridgeProvider from "./BridgeProvider";
 import ZksyncEraProviderProvider from "./ZksyncEraProvider";
-import BridgeFrom from "./components/BridgeFrom";
+import BridgeTxForm from "./BridgeTxForm";
 
 const BridgeMain = () => {
   const [currentTab, setCurrentTab] = useState<BridgeTabEnum>(
@@ -29,22 +29,7 @@ const BridgeMain = () => {
   return (
     <Container>
       <Stack alignItems={"center"} sx={{ mt: 3 }}>
-        <Card
-          className="flex-col-c"
-          sx={{
-            width: 600,
-            p: 3,
-          }}
-        >
-          <Tabs value={currentTab} onChange={handleFilterStatus}>
-            {tabs.map(tab => (
-              <Tab key={tab.value} value={tab.value} label={tab.label} />
-            ))}
-          </Tabs>
-          <Stack sx={{ mt: 2, width: "100%" }}>
-            <BridgeFrom />
-          </Stack>
-        </Card>
+        <BridgeTxForm />
       </Stack>
     </Container>
   );

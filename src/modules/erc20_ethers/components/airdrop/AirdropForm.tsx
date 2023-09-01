@@ -11,7 +11,7 @@ import handleError from "@/src/utils/handleError";
 import { ERC20_CONTRACT_ADDR } from "@/src/constants/wallet";
 import { toast } from "react-toastify";
 import { useErc20Context } from "src/provider/Erc20Provider";
-import { ethers } from "ethers";
+
 import { parseUnits } from "ethers/lib/utils";
 
 interface IAirdropFormProps {
