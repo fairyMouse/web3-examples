@@ -1,6 +1,7 @@
 import { goerli, mainnet } from "@wagmi/core/chains";
 import { EraNetwork, L2Network } from "../types/network";
-import { Network } from "ethers";
+import { Network } from "zksync/build/types";
+// import { Network } from "ethers";
 
 console.log("goerli:", goerli);
 export const blockExplorerUrl = goerli.blockExplorers.default.url;
