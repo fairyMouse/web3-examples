@@ -51,7 +51,7 @@ export const eraNetworks: EraNetwork[] = [
   },
 ];
 
-export type ZkSyncLiteNetwork = L2Network & { network: Network };
+export type ZkSyncLiteNetwork = L2Network & { network: string };
 export const zkSyncLiteNetworks: ZkSyncLiteNetwork[] = [
   {
     key: "lite-mainnet",
