@@ -1,9 +1,11 @@
 import { Card, Container, Stack, Tab, Tabs } from "@mui/material";
 import { BridgeTabEnum } from "./types";
 import { useState } from "react";
-import DepositForm from "./components/deposit/DepositForm";
+import BridgeProvider from "./BridgeProvider";
+import ZksyncEraProviderProvider from "./ZksyncEraProvider";
+import BridgeFrom from "./components/BridgeFrom";
 
-const BridgeIndex = () => {
+const BridgeMain = () => {
   const [currentTab, setCurrentTab] = useState<BridgeTabEnum>(
     BridgeTabEnum.DEPOSIT
   );
@@ -40,11 +42,21 @@ const BridgeIndex = () => {
             ))}
           </Tabs>
           <Stack sx={{ mt: 2, width: "100%" }}>
-            <DepositForm />
+            <BridgeFrom />
           </Stack>
         </Card>
       </Stack>
     </Container>
+  );
+};
+
+const BridgeIndex = () => {
+  return (
+    <BridgeProvider>
+      <ZksyncEraProviderProvider>
+        <BridgeMain />
+      </ZksyncEraProviderProvider>
+    </BridgeProvider>
   );
 };
 

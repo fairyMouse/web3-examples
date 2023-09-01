@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 
+export const CONNECT_WALLET_TEXT = "Please connect wallet first";
+
 export const WELCOME_TEXT =
   "Hello! Please sign this message to confirm your ownership of the address. This action will not cost any gas fee. Here is a unique text: ";
 

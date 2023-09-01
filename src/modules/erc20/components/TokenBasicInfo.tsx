@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  CONNECT_WALLET_TEXT,
   ERC20_CONTRACT_ADDR,
   FAUCET_CONTRACT_ADDR,
 } from "src/constants/wallet";
@@ -62,7 +63,7 @@ const TokenBasicInfo = () => {
   }, [isSuccess, balanceRes]);
 
   const faucetButtonText = useMemo(() => {
-    if (!address) return `Please connect wallet first`;
+    if (!address) return CONNECT_WALLET_TEXT;
     if (isSuccess || isFaucetRequested) return "Already Received";
     return "Receive";
   }, [address, isFaucetRequested, isSuccess]);

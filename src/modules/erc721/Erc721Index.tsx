@@ -1,62 +1,71 @@
-import { useErc721Context } from "@/src/provider/Erc721Provider";
-import { useWalletContext } from "@/src/provider/WalletProvider";
 import { LoadingButton } from "@mui/lab";
 import { Box, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import NFTCard from "./components/NFTCard";
 import { toast } from "react-toastify";
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+import {
+  CONNECT_WALLET_TEXT,
+  ERC721_CONTRACT_ADDR,
+} from "@/src/constants/wallet";
+import RandomNFT_ABI from "src/constants/abi/RandomNFT.abi.json";
+import { IContractParams } from "../erc20/types";
 
 const Erc721Index = () => {
-  const { account } = useWalletContext();
-  const { erc721ProviderContract, erc721SignerContract } = useErc721Context();
-  const [list, setList] = useState<any[]>([]);
-  const [minting, setMinting] = useState(false);
+  const { address } = useAccount();
 
-  useEffect(() => {
-    updateNFTList();
-  }, [erc721ProviderContract]);
-
-  const updateNFTList = async () => {
-    if (erc721ProviderContract) {
-      const res = await erc721ProviderContract.getDonkeys(account);
-      const list = res.toArray().map((item: any) => item.toObject());
-
-      console.log("setList:", list);
-      setList(list);
-    }
+  const ERC721ContractParams: IContractParams = {
+    address: ERC721_CONTRACT_ADDR,
+    abi: RandomNFT_ABI,
   };
 
-  const mintNFT = async () => {
-    console.log("mintNFT");
-    if (account && erc721SignerContract) {
-      try {
-        setMinting(true);
+  const { data: nftList, refetch } = useContractRead({
+    ...ERC721ContractParams,
+    functionName: "getDonkeys",
+    args: [address || "0x"],
+    enabled: !!address,
+  }) as any;
 
-        const res = await erc721SignerContract.safeMint(account);
-        console.log("结果信息:", res);
-        const receipt = await res.wait();
-        console.log("收据信息:", receipt);
+  console.log("nftList:", nftList);
 
-        updateNFTList();
-        toast.success("successfully minted!");
-      } catch (error: any) {
-        console.log(error);
-        toast.error(error.toString());
-      } finally {
-        setMinting(false);
-      }
+  const { data, error, isError, isLoading, write } = useContractWrite({
+    ...ERC721ContractParams,
+    functionName: "safeMint",
+  });
+
+  const { isSuccess, isLoading: isTxLoading } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("successfully minted!");
+      refetch();
     }
+  }, [isSuccess, refetch]);
+
+  const mintNFT = async () => {
+    write &&
+      write({
+        args: [address],
+      });
   };
   return (
     <Container>
       <Stack flexDirection={"row"} justifyContent={"center"} sx={{ mt: 4 }}>
         <LoadingButton
-          sx={{ width: 120 }}
+          sx={{ minWidth: 120 }}
+          disabled={!address}
           onClick={mintNFT}
-          loading={minting}
+          loading={isLoading || isTxLoading}
           loadingIndicator={"minting..."}
         >
-          Mint NFT
+          {address ? "Mint NFT" : CONNECT_WALLET_TEXT}
         </LoadingButton>
       </Stack>
       <Box
@@ -69,8 +78,8 @@ const Erc721Index = () => {
           lg: "repeat(3, 1fr)",
         }}
       >
-        {list.map(item => (
-          <NFTCard key={item.uri} data={item} />
+        {nftList?.map((nft: any) => (
+          <NFTCard key={nft.uri} data={nft} />
         ))}
       </Box>
     </Container>
