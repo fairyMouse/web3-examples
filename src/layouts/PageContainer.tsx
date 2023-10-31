@@ -1,21 +1,22 @@
-import { Button, Stack } from "@mui/material";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { l1Networks } from "../constants/network";
+import { Button, Stack } from "@mui/material"
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
+import { l1Networks } from "../constants/network"
 
 interface IPageContainerProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const PageContainer = (props: IPageContainerProps) => {
-  const { children } = props;
-  const { address } = useAccount();
-  const { chain } = useNetwork();
-  const { switchNetwork } = useSwitchNetwork();
+  const { children } = props
+  const { address } = useAccount()
+  const { chain } = useNetwork()
+  const { switchNetwork } = useSwitchNetwork()
 
-  const isCorrectNetwork = chain?.id === l1Networks.goerli.id;
+  const isCorrectNetwork = chain?.id === l1Networks.goerli.id
 
   return (
     <Stack sx={{ mt: 3 }}>
+      <div className="ml-4">123</div>
       {isCorrectNetwork ? (
         children
       ) : (
@@ -30,7 +31,7 @@ const PageContainer = (props: IPageContainerProps) => {
         </Stack>
       )}
     </Stack>
-  );
-};
+  )
+}
 
-export default PageContainer;
+export default PageContainer

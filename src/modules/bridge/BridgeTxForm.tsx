@@ -13,26 +13,26 @@ import {
   Typography,
   alpha,
   useTheme,
-} from "@mui/material";
-import ErrorIcon from "@mui/icons-material/Error";
-import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
-import { LoadingButton } from "@mui/lab";
+} from "@mui/material"
+import ErrorIcon from "@mui/icons-material/Error"
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded"
+import { LoadingButton } from "@mui/lab"
 
-import BridgeFrom from "./components/BridgeFrom";
-import BridgeTo from "./components/BridgeTo";
-import { ArrowDown, XIcon } from "lucide-react";
-import FormProvider from "src/components/hook-form/FormProvider";
-import BridgeProvider, { useBridgeProviderContext } from "./BridgeProvider";
-import { BridgeTxDirectionEnum } from "./types";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { formatEther, parseEther } from "ethers/lib/utils";
-import { ETH_L1_ADDRESS } from "src/constants/address";
+import BridgeFrom from "./components/BridgeFrom"
+import BridgeTo from "./components/BridgeTo"
+import { ArrowDown, XIcon } from "lucide-react"
+import FormProvider from "src/components/hook-form/FormProvider"
+import BridgeProvider, { useBridgeProviderContext } from "./BridgeProvider"
+import { BridgeTxDirectionEnum } from "./types"
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
+import { formatEther, parseEther } from "ethers/lib/utils"
+import { ETH_L1_ADDRESS } from "src/constants/address"
 
-import { useEffect, useMemo, useState } from "react";
-import BridgeTxItem from "./components/BridgeTxItem";
-import EthereumSvg from "@icons/blockchain/ethereum.svg";
-import { useEraProviderStore } from "./hooks/useEraProviderStore";
-import { useZksyncEraProviderContext } from "./ZksyncEraProvider";
+import { useEffect, useMemo, useState } from "react"
+import BridgeTxItem from "./components/BridgeTxItem"
+import EthereumSvg from "@icons/blockchain/ethereum.svg"
+import { useEraProviderStore } from "./hooks/useEraProviderStore"
+import { useZksyncEraProviderContext } from "./ZksyncEraProvider"
 
 const tabs = [
   {
@@ -43,13 +43,13 @@ const tabs = [
     label: "Withdraw",
     value: BridgeTxDirectionEnum.WITHDRAW,
   },
-];
+]
 
 const BridgeTxForm = () => {
-  const { palette } = useTheme();
-  const { address } = useAccount();
-  const { switchNetwork } = useSwitchNetwork();
-  const [currentTx, setCurrentTx] = useState<any>(null);
+  const { palette } = useTheme()
+  const { address } = useAccount()
+  const { switchNetwork } = useSwitchNetwork()
+  const [currentTx, setCurrentTx] = useState<any>(null)
 
   const {
     maxFee,
@@ -65,28 +65,28 @@ const BridgeTxForm = () => {
     setTxDirection,
     isCorrectNetworkSet,
     updateDepositFee,
-  } = useBridgeProviderContext();
-  const { eraNetwork } = useEraProviderStore();
+  } = useBridgeProviderContext()
+  const { eraNetwork } = useEraProviderStore()
 
   const correctNetworkName = isDeposit
     ? eraNetwork?.l1Network?.name
-    : eraNetwork?.name;
+    : eraNetwork?.name
   const correctNetworkId = isDeposit
     ? eraNetwork?.l1Network?.id
-    : eraNetwork?.id;
-  console.log("eraNetwork:", eraNetwork);
-  console.log("isCorrectNetworkSet:", isCorrectNetworkSet, correctNetworkName);
+    : eraNetwork?.id
+  console.log("eraNetwork:", eraNetwork)
+  console.log("isCorrectNetworkSet:", isCorrectNetworkSet, correctNetworkName)
 
   const { eraL2Signer, maxWithdrawFee, updateWithdrawFee } =
-    useZksyncEraProviderContext();
-  const [actionStatus, setActionStatus] = useState("idle");
-  const { watch, setValue, handleSubmit } = methods;
-  const values = watch();
-  const { amount } = values;
+    useZksyncEraProviderContext()
+  const [actionStatus, setActionStatus] = useState("idle")
+  const { watch, setValue, handleSubmit } = methods
+  const values = watch()
+  const { amount } = values
   // console.log(formatEther("782081502687274") * 1500); // $1.17
 
   async function makeTransaction() {
-    setActionStatus("start");
+    setActionStatus("start")
     if (
       isDeposit &&
       fullDepositFee &&
@@ -105,23 +105,23 @@ const BridgeTxForm = () => {
             maxFeePerGas: fullDepositFee.maxFeePerGas,
             maxPriorityFeePerGas: fullDepositFee.maxPriorityFeePerGas,
           },
-        };
-        console.log("depositParams:", depositParams);
+        }
+        console.log("depositParams:", depositParams)
 
-        setActionStatus("pending");
-        const depositResponse = await eraL1Signer.deposit(depositParams);
-        console.log("depositResponse:", depositResponse);
+        setActionStatus("pending")
+        const depositResponse = await eraL1Signer.deposit(depositParams)
+        console.log("depositResponse:", depositResponse)
 
-        setValue("amount", "");
-        setOpen(true);
+        setValue("amount", "")
+        setOpen(true)
         setCurrentTx({
           type: "deposit",
           openL1Explorer: true,
           transactionHash: depositResponse.hash,
           amount: depositResponse.value.toString(),
-        });
+        })
       } catch (error: any) {
-        console.error(error.message);
+        console.error(error.message)
       }
     }
     if (isWithdraw) {
@@ -133,75 +133,75 @@ const BridgeTxForm = () => {
         //   gasLimit: fullDepositFee.l2GasLimit,
         //   gasPrice: fullDepositFee.gasPrice,
         // },
-      };
+      }
       if (eraL2Signer?.withdraw) {
-        console.log("withdraw:", withdrawParams);
-        setActionStatus("pending");
-        const withdrawRes = await eraL2Signer.withdraw(withdrawParams);
-        console.log("withdrawRes:", withdrawRes);
+        console.log("withdraw:", withdrawParams)
+        setActionStatus("pending")
+        const withdrawRes = await eraL2Signer.withdraw(withdrawParams)
+        console.log("withdrawRes:", withdrawRes)
 
-        setValue("amount", "");
-        setOpen(true);
+        setValue("amount", "")
+        setOpen(true)
         setCurrentTx({
           type: "withdrawal",
           transactionHash: withdrawRes.hash,
           amount: withdrawRes.value.toString(),
-        });
+        })
       }
     }
 
-    setActionStatus("idle");
+    setActionStatus("idle")
   }
 
   const actionText = useMemo(() => {
     if (!isCorrectNetworkSet) {
-      return `Change wallet network to ${correctNetworkName}`;
+      return `Change wallet network to ${correctNetworkName}`
     }
     switch (actionStatus) {
       case "start":
-        return "";
+        return ""
       case "pending":
-        return "Waiting for confirmation";
+        return "Waiting for confirmation"
     }
 
     return txDirection === BridgeTxDirectionEnum.DEPOSIT
       ? "Deposit"
-      : "Withdraw";
-  }, [txDirection, actionStatus, isCorrectNetworkSet, correctNetworkName]);
+      : "Withdraw"
+  }, [txDirection, actionStatus, isCorrectNetworkSet, correctNetworkName])
 
   const actionDisabled = useMemo(() => {
     if (!address) {
-      return true;
+      return true
     }
     if (!isCorrectNetworkSet) {
-      return false;
+      return false
     }
 
-    return Number(amount) <= 0 || actionStatus !== "idle";
-  }, [amount, actionStatus, isCorrectNetworkSet, address]);
+    return Number(amount) <= 0 || actionStatus !== "idle"
+  }, [amount, actionStatus, isCorrectNetworkSet, address])
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const updateSeconds = 60;
-  const [timeLeft, setTimeLeft] = useState(updateSeconds);
+  const updateSeconds = 60
+  const [timeLeft, setTimeLeft] = useState(updateSeconds)
 
   useEffect(() => {
     if (timeLeft > 0 && address) {
       const timerId = setTimeout(() => {
-        const next = timeLeft - 1;
+        const next = timeLeft - 1
         if (next === 0) {
-          isDeposit ? updateDepositFee() : updateWithdrawFee();
-          setTimeLeft(updateSeconds);
+          isDeposit ? updateDepositFee() : updateWithdrawFee()
+          setTimeLeft(updateSeconds)
         } else {
-          setTimeLeft(next);
+          setTimeLeft(next)
         }
-      }, 1000);
+      }, 1000)
 
-      return () => clearTimeout(timerId); // 在组件卸载或重新渲染时清除定时器
+      return () => clearTimeout(timerId) // 在组件卸载或重新渲染时清除定时器
     }
-  }, [timeLeft, isDeposit, address, updateDepositFee, updateWithdrawFee]);
+  }, [timeLeft, isDeposit, address, updateDepositFee, updateWithdrawFee])
 
-  const progressValue = (updateSeconds - timeLeft) * (100 / updateSeconds);
+  const progressValue = (updateSeconds - timeLeft) * (100 / updateSeconds)
 
   return (
     <FormProvider methods={methods}>
@@ -260,19 +260,19 @@ const BridgeTxForm = () => {
             sx={{ borderRadius: 100, bgcolor: alpha("#000", 0.16), p: "4px" }}
           >
             {tabs.map(tab => {
-              const isActive = tab.value === txDirection;
+              const isActive = tab.value === txDirection
               return (
                 <Button
                   key={tab.value}
                   sx={{ borderRadius: 100, width: 90 }}
                   variant={isActive ? "soft" : "text"}
                   onClick={() => {
-                    setTxDirection(tab.value);
+                    setTxDirection(tab.value)
                   }}
                 >
                   {tab.label}
                 </Button>
-              );
+              )
             })}
           </Stack>
 
@@ -363,6 +363,7 @@ const BridgeTxForm = () => {
             </Stack>
           )}
         </Stack>
+
         <Stack sx={{ mt: 3 }} spacing={3} alignItems={"center"}>
           <LoadingButton
             sx={{ width: "100%" }}
@@ -370,9 +371,9 @@ const BridgeTxForm = () => {
             disabled={actionDisabled}
             onClick={e => {
               if (!isCorrectNetworkSet && correctNetworkId && switchNetwork) {
-                switchNetwork(correctNetworkId);
+                switchNetwork(correctNetworkId)
               } else {
-                makeTransaction();
+                makeTransaction()
                 // handleSubmit(makeTransaction)(e);
               }
             }}
@@ -388,7 +389,7 @@ const BridgeTxForm = () => {
         </Stack>
       </Card>
     </FormProvider>
-  );
-};
+  )
+}
 
-export default BridgeTxForm;
+export default BridgeTxForm
