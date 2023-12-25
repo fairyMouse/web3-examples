@@ -16,7 +16,6 @@ const PageContainer = (props: IPageContainerProps) => {
 
   return (
     <Stack sx={{ mt: 3 }}>
-      <div className="ml-4">123</div>
       {isCorrectNetwork ? (
         children
       ) : (

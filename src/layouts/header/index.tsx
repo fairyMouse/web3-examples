@@ -1,7 +1,7 @@
-import { HEADER, NAV } from "@/src/constants/layouts";
+import { HEADER, NAV } from "@/src/constants/layouts"
 
-import { LoadingButton } from "@mui/lab";
-import EthereumSvg from "@icons/blockchain/ethereum.svg";
+import { LoadingButton } from "@mui/lab"
+import EthereumSvg from "@icons/blockchain/ethereum.svg"
 import {
   AppBar,
   Box,
@@ -9,32 +9,32 @@ import {
   Stack,
   Typography,
   capitalize,
-} from "@mui/material";
-import MetamaskSvg from "public/icons/common/metamask.svg";
-import { useEffect, useState } from "react";
-import Iconify from "@/src/components/iconify/Iconify";
-import { toast } from "react-toastify";
-import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi";
-import { InjectedConnector } from "@wagmi/core";
-import { shortenAddress } from "@/src/utils/formatters";
+} from "@mui/material"
+import MetamaskSvg from "public/icons/common/metamask.svg"
+import { useEffect, useState } from "react"
+import Iconify from "@/src/components/iconify/Iconify"
+import { toast } from "react-toastify"
+import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi"
+import { InjectedConnector } from "@wagmi/core"
+import { shortenAddress } from "@/src/utils/formatters"
 
 const Header = () => {
-  const { address, isConnecting } = useAccount();
-  const { disconnect } = useDisconnect();
+  const { address, isConnecting } = useAccount()
+  const { disconnect } = useDisconnect()
   const { connect, isLoading } = useConnect({
     connector: new InjectedConnector(),
-  });
-  const { chain } = useNetwork();
-  const disconnectText = "disconnect";
-  const [buttonText, setButtonText] = useState("");
+  })
+  const { chain } = useNetwork()
+  const disconnectText = "disconnect"
+  const [buttonText, setButtonText] = useState("")
 
   useEffect(() => {
-    setButtonText(address || "");
-  }, [address]);
+    setButtonText(address || "")
+  }, [address])
 
   const walletDisconnect = () => {
-    disconnect();
-  };
+    disconnect()
+  }
   return (
     <AppBar
       sx={{
@@ -86,7 +86,7 @@ const Header = () => {
         </Stack>
       </Stack>
     </AppBar>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
